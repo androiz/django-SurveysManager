@@ -1,4 +1,4 @@
-# django-BaseProject
+# django-SurveysManager
 This project is a django base-project. It's useful so as to start a project because you have well 
 developed a module for signup & login with an user-extended profile. Functionalities in the project 
 include: 
