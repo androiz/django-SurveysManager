@@ -78,17 +78,45 @@
 
             <div class="col-md-9">
                 <div class="panel space-4">
-                    <div class="panel-body">
-
-                        <a href="#" class="btn btn-primary pull-right">Invitaciones</a>
-
-                        <p class="h4">¡Invita a tus amigos y consigue crédito de viaje! </p><p> Gana hasta 95€ por cada persona a la que invites.
-                        </p>
+                    <div class="panel-header">
+                        Surveys
+                        <a href="#" class="btn btn-primary pull-right">New Survey</a>
                     </div>
+                    {% if surveys %}
+                    <ul class="list-layout list-unstyled">
+                        {% for survey in surveys %}
+                        <li class="panel-body thread-read thread">
+                            <div class="row">
+                                <div class="col-md-3">
+                                  {{ survey.name }}
+                                </div>
+                                <a href="#" class="link-reset text-muted">
+                                  <div class="col-md-5">
+                                    http://surveysmanager.com/survey/{{ survey.id }}
+                                  </div>
+                                </a>
+                                <div class="col-md-2">
+                                    {% if survey.active %}
+                                        <span class="label label-green label-success">Active</span>
+                                    {% else %}
+                                        <span class="label label-red label-danger">Active</span>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-2">
+                                    <a class="label label-green label-warning">Show Options</a>
+                                </div>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                        <div class="panel-body">
+                            <p> No surveys! </p>
+                        </div>
+                    {% endif %}
                 </div>
 
-
-                <div class="panel space-4">
+                <!--div class="panel space-4">
                     <div class="panel-header">
                       Mensajes (0 nuevos)
                     </div>
@@ -165,7 +193,7 @@
                     <div class="panel-body">
                         <a href="#">Todos los mensajes</a>
                     </div>
-                </div>
+                </div-->
             </div>
         </div>
     </div>

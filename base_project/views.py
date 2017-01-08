@@ -6,7 +6,7 @@ from django.views.generic import TemplateView
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from base_project.models import UserProfile
+from base_project.models import UserProfile, Survey
 
 from django.contrib import messages
 
@@ -91,8 +91,11 @@ class MyAccount(TemplateView):
 
     def get(self, request, *args, **kwargs):
         user_profile = UserProfile.objects.get(user=request.user)
+        surveys = Survey.objects.filter(user=request.user)
+
         context = {
-            'profile': user_profile
+            'profile': user_profile,
+            'surveys': surveys
         }
         return render(request, template_name=self.template_name, context=context)
 
