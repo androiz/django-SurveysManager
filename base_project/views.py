@@ -7,6 +7,7 @@ from django.views.generic import TemplateView
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from base_project.models import UserProfile, Survey
+from base_project.forms import SurveyForm
 
 from django.contrib import messages
 
@@ -96,6 +97,31 @@ class MyAccount(TemplateView):
         context = {
             'profile': user_profile,
             'surveys': surveys
+        }
+        return render(request, template_name=self.template_name, context=context)
+
+class CreateSurvey(TemplateView):
+    template_name = 'createsurvey.html'
+
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        form = SurveyForm()
+
+        context = {
+            'user': user,
+            'form': form
+        }
+
+        return render(request, template_name=self.template_name, context=context)
+
+    def post(self, request):
+        user = request.user
+        data = request.POST
+
+        print data['dict']
+
+        context = {
+            'user': user
         }
         return render(request, template_name=self.template_name, context=context)
 

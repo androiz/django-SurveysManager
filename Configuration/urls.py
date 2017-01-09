@@ -19,13 +19,14 @@ from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 from django.conf.urls.static import static
 
-from base_project.views import Home, SignUp, Login, Logout, MyAccount, EditProfile, ChangeImage, ChangePassword
+from base_project.views import Home, SignUp, Login, Logout, MyAccount, EditProfile, ChangeImage, ChangePassword, CreateSurvey
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', Home.as_view()),
 
     url(r'^my_account/$', login_required(MyAccount.as_view())),
+    url(r'^create_survey/$', login_required(CreateSurvey.as_view())),
     url(r'^edit_profile/$', login_required(EditProfile.as_view())),
     url(r'^change_image/$', login_required(ChangeImage.as_view())),
     url(r'^change_password/$', login_required(ChangePassword.as_view())),

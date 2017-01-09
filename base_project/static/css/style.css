@@ -69,3 +69,71 @@ ul.sidenav-list li{
 ul.sidenav-list li.active{
     font-weight: bold;
 }
+
+
+/* Create Survey */
+
+#createSurvey .form-group input[type="checkbox"] {
+    display: none;
+}
+
+#createSurvey .form-group input[type="checkbox"] + .btn-group > label span {
+    width: 20px;
+}
+
+#createSurvey .form-group input[type="checkbox"] + .btn-group > label span:first-child {
+    display: none;
+}
+#createSurvey .form-group input[type="checkbox"] + .btn-group > label span:last-child {
+    display: inline-block;
+}
+
+#createSurvey .form-group input[type="checkbox"]:checked + .btn-group > label span:first-child {
+    display: inline-block;
+}
+#createSurvey .form-group input[type="checkbox"]:checked + .btn-group > label span:last-child {
+    display: none;
+}
+
+#createSurvey form .row:first-child .floating-label-form-group{
+    border: none;
+}
+
+#createSurvey .panel-header {
+    background-color: #edefed;
+}
+
+#createSurvey .panel-header {
+    color: #484848;
+    font-size: 16px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #dce0e0;
+}
+
+#createSurvey .panel-header {
+    color: #484848;
+    font-size: 16px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #dce0e0;
+}
+
+#createSurvey .panel-header, .panel-body, ul.panel-body>li, ol.panel-body>li, .panel-footer {
+    position: relative;
+    margin: 0;
+    padding: 20px;
+    border-top: 1px solid #dce0e0;
+}
+
+#createSurvey .form-group {
+    margin-bottom: 15px;
+}
+
+#createSurvey .question .form-group{
+    color: #484848;
+}
+
+.question h2{
+    padding-top: 10px;
+}

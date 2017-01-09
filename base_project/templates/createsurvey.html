@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+{% load staticfiles%}
+
+{% block title %}Create Survey{% endblock %}
+
+
+{% block content %}
+<section class="success" id="createSurvey">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <h2>Create Survey</h2>
+                <hr class="star-light">
+            </div>
+        </div>
+        <div class="row white-box">
+            <div class="col-md-3">
+            </div>
+            <div class="col-md-7">
+                <div class="panel space-4">
+                    <div class="panel-header">
+                      Survey
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-8 col-lg-offset-2">
+                            <div id="survey_info">
+                                <div class="row control-group">
+                                    <div class="form-group col-xs-12 floating-label-form-group controls">
+                                        <label>Name</label>
+                                        {{ form.name }}
+                                        <p class="help-block text-danger"></p>
+                                    </div>
+                                </div>
+                                <div class="row control-group">
+                                    <div class="form-group col-xs-12">
+                                        {{ form.active }}
+                                        <div class="btn-group active_button">
+                                            <label for="fancy-checkbox-info" class="btn btn-info">
+                                                <span class="glyphicon glyphicon-ok"></span>
+                                                <span> </span>
+                                            </label>
+                                            <label for="fancy-checkbox-info" class="btn btn-default active">
+                                                Active
+                                            </label>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel space-4">
+                    <div class="panel-header">
+                        Questions
+                        <div class="pull-right">
+                                <button id="add_question" type="button" class="btn btn-success btn-sm">+</button>
+                                <button id="remove_question" type="button" class="btn btn-danger btn-sm">-</button>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-10 col-lg-offset-1">
+                            <!-- Question -->
+                            <div class="question question_1">
+                                <div class="row control-group">
+                                    <div class="form-group col-xs-2"><h2>#1</h2></div>
+                                    <div class="form-group col-xs-10 controls">
+                                      <label for="sel1">Question Type:</label>
+                                      <select class="form-control question_type question_type_1" id="sel1">
+                                        <option value="text" selected>Text</option>
+                                        <option value="integer">Integer</option>
+                                        <option value="checkbox">Checkbox</option>
+                                        <option value="select">Select</option>
+                                      </select>
+                                    </div>
+                                </div>
+                                <div class="row control-group">
+                                    <div class="form-group col-xs-2"></div>
+                                    <div class="form-group col-xs-10 controls">
+                                      <label>Description:</label>
+                                      <textarea class="form-control question_description" rows="3"></textarea>
+                                    </div>
+                                </div>
+                                <div class="row control-group question_options_1">
+                                    <div class="form-group col-xs-2"></div>
+                                    <div class="form-group col-xs-10 controls">
+                                        <div class="alert alert-info" role="alert">
+                                            Please, write all options separated by <strong>comma (,)</strong> if you are
+                                            setting up a <strong>select</strong> or <strong>checkbox</strong> widget.
+                                        </div>
+                                        <label>Options:</label>
+                                        <input type="text" class="form-control question_options">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-1 col-lg-offset-10">
+                            <button id="save" type="submit" class="btn btn-success btn-lg">Save</button>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+{% block scripts %}
+
+<script src="{% static "js/add_remove_question.js" %}"></script>
+<script>
+    $('.active_button').click(function () {
+        if(!$('#fancy-checkbox-info').prop('checked')){
+            console.log('Uncheck');
+            $('#fancy-checkbox-info').prop( "checked", false );
+        }else{
+            console.log('Check');
+            $('#fancy-checkbox-info').prop( "checked", true );
+        }
+    });
+
+    $('#save').click(function () {
+
+        var dict = {};
+        var question_type = {};
+        var question_description = {};
+        var question_options = {};
+
+        var survey_name =  $('#survey_name').val();
+        var active = $('#fancy-checkbox-info').prop('checked');
+
+        $('.question_type').each(function (index) {
+            //console.log($(this).val());
+            question_type["question_type_"+index] = $(this).val();
+        });
+        $('.question_description').each(function (index) {
+            //console.log($(this).val());
+            question_description["question_description_"+index] = $(this).val();
+        });
+        $('.question_options').each(function (index) {
+            //console.log($(this).val());
+            question_options["question_options_"+index] =  $(this).val();
+        });
+        dict["survey_name"] = survey_name;
+        dict["active"] = active;
+        dict["question_type"] = question_type;
+        dict["question_description"] = question_description;
+        dict["question_options"] = question_options;
+
+        $.ajax({
+            url : "",
+            type: "POST",
+            data : {'csrfmiddlewaretoken': '{{csrf_token}}', 'dict': JSON.stringify(dict)},
+            success: function(data, textStatus, jqXHR)
+            {
+                //data - response from server
+                console.log("ok");
+            },
+            error: function (jqXHR, textStatus, errorThrown)
+            {
+                console.log("error");
+            }
+        });
+
+    });
+</script>
+
+{% endblock %}
