@@ -1,15 +1,18 @@
 # -*- coding: utf-8 -*-
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.views.generic import TemplateView
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from base_project.models import UserProfile, Survey
+from base_project.models import UserProfile, Survey, Question
 from base_project.forms import SurveyForm
+from base_project.constants import CHECKBOX, SELECT, INTEGER, TEXT, YES_NO
 
 from django.contrib import messages
+
+import json
 
 # Create your views here.
 
@@ -118,12 +121,40 @@ class CreateSurvey(TemplateView):
         user = request.user
         data = request.POST
 
-        print data['dict']
+        survey = json.loads(data['dict'])
+
+        survey_name = survey['survey_name']
+        survey_active = survey['active']
+
+        try:
+            s = Survey.objects.create(user=user, name=survey_name, active=survey_active)
+        except Exception as e:
+            print e
+
+        for i in range(0,len(survey['question_type'])):
+            QUESTION_TYPE_N = "question_type_" + str(i)
+            QUESTION_DESCRIPTION_N = "question_description_" + str(i)
+            QUESTION_OPTIONS_N = "question_options_" + str(i)
+
+            TYPES = [SELECT, CHECKBOX]
+
+            question_type = survey['question_type'][QUESTION_TYPE_N]
+            question_description = survey['question_description'][QUESTION_DESCRIPTION_N]
+            question_options = ""
+            if question_type in TYPES:
+                question_options = survey['question_options'][QUESTION_OPTIONS_N]
+
+
+            q = Question.objects.create(survey=s, question_type=question_type,
+                                        question_description=question_description,
+                                        question_options=question_options)
+
 
         context = {
-            'user': user
+            'status': 1
         }
-        return render(request, template_name=self.template_name, context=context)
+
+        return HttpResponse(json.dumps(context), content_type='application/json')
 
 class EditProfile(TemplateView):
     template_name = "edit_profile.html"
@@ -252,3 +283,47 @@ class ChangePassword(TemplateView):
             # user was empty
             messages.error(request, "<strong>Error!</strong> No puede haber campos vacios.")
             return render(request, template_name=self.template_name, context=context)
+
+class SurveyOptionsSurvey(TemplateView):
+    template_name = "survey_options_survey.html"
+
+    def get(self, request, id):
+        user = request.user
+        survey = Survey.objects.get(user=user, pk=id)
+
+        context = {
+            'user': user,
+            'survey': survey
+        }
+
+        return render(request, template_name=self.template_name, context=context)
+
+    def post(self, request, id):
+        name = request.POST.get('survey_name')
+        active = YES_NO(request.POST.get('survey_active'))
+
+        user = request.user
+
+        survey = Survey.objects.get(user=user, pk=id)
+        survey.name = name
+        survey.active = active
+        survey.save()
+
+
+        context = {
+            'user': user,
+            'survey': survey
+        }
+
+        messages.success(request, "<strong>Exito!</strong> La imagen se ha guardado correctamente.")
+        return render(request, template_name=self.template_name, context=context)
+
+class DeleteSurvey(TemplateView):
+
+    def get(self, request, id):
+        user = request.user
+        survey = Survey.objects.get(user=user, pk=id)
+        survey.delete()
+
+        messages.success(request, "<strong>Exito!</strong> La encuesta ha sido eliminada correctamente.")
+        return HttpResponseRedirect('/my_account')

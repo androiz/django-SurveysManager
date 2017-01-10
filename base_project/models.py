@@ -16,7 +16,7 @@ class UserProfile(models.Model):
         return str(self.id)
 
 class Survey(models.Model):
-    user = models.OneToOneField(User)
+    user = models.ForeignKey(User)
     name = models.CharField(max_length=100, blank=False, null=False)
     active = models.BooleanField(default=True)
 
@@ -24,7 +24,7 @@ class Survey(models.Model):
         return self.name
 
 class Question(models.Model):
-    survey = models.OneToOneField(Survey)
+    survey = models.ForeignKey(Survey)
     question_type = models.CharField(max_length=100, blank=False, null=False)
     question_description = models.CharField(max_length=255, blank=False, null=False)
     question_options = models.CharField(max_length=255, blank=True, null=True)
@@ -33,8 +33,8 @@ class Question(models.Model):
         return str(self.id)
 
 class Answer(models.Model):
-    survey = models.OneToOneField(Survey)
-    question = models.OneToOneField(Question)
+    survey = models.ForeignKey(Survey)
+    question = models.ForeignKey(Question)
     answer_group = models.IntegerField(null=False, blank=False)
     answer = models.CharField(max_length=255, blank=True, null=True)
 

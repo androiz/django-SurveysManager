@@ -19,7 +19,8 @@ from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 from django.conf.urls.static import static
 
-from base_project.views import Home, SignUp, Login, Logout, MyAccount, EditProfile, ChangeImage, ChangePassword, CreateSurvey
+from base_project.views import Home, SignUp, Login, Logout, MyAccount, \
+    EditProfile, ChangeImage, ChangePassword, CreateSurvey, SurveyOptionsSurvey, DeleteSurvey
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -27,9 +28,13 @@ urlpatterns = [
 
     url(r'^my_account/$', login_required(MyAccount.as_view())),
     url(r'^create_survey/$', login_required(CreateSurvey.as_view())),
+
     url(r'^edit_profile/$', login_required(EditProfile.as_view())),
     url(r'^change_image/$', login_required(ChangeImage.as_view())),
     url(r'^change_password/$', login_required(ChangePassword.as_view())),
+
+    url(r'^survey_options/(?P<id>\d+)/$', login_required(SurveyOptionsSurvey.as_view())),
+    url(r'^delete_survey/(?P<id>\d+)/$', login_required(DeleteSurvey.as_view())),
 
     url(r'^sign_up/$', SignUp.as_view()),
     url(r'^login/$', Login.as_view()),

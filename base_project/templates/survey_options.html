@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load staticfiles%}
+
+{% block title %}Survey{% endblock %}
+
+
+{% block content %}
+<section class="success" id="account">
+    <div class="container">
+        <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2>Survey</h2>
+                    <hr class="star-light">
+                </div>
+            </div>
+        <div class="row white-box">
+            <div class="col-md-3">
+
+              <div class="panel space-4">
+                <div class="panel-header">
+                    Survey
+                </div>
+                <div class="sidenav">
+                  <ul class="sidenav-list list-unstyled">
+                    <li class="active">
+                        <a href="#">Survey</a>
+                    </li>
+                    <li>
+                        <a href="#">Questions</a>
+                    </li>
+                    <li>
+                        <a href="#">Show Data</a>
+                    </li>
+                  </ul>
+                </div>
+                <a href="/delete_survey/{{ survey.id }}" class="btn btn-danger btn-block">Delete</a>
+              </div>
+            </div>
+            {% block edit_survey_options %}
+
+            {% endblock %}
+        </div>
+    </div>
+</section>
+{% endblock %}

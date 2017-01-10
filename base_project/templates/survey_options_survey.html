@@ -1,0 +1,64 @@
+{% extends "survey_options.html" %}
+{% load staticfiles%}
+
+{% block title %}Survey{% endblock %}
+
+{% block edit_survey_options %}
+<div class="col-md-9">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-{{ message.tags }}{% endif %}">  <!-- singular -->
+                <a class="close" data-dismiss="alert">×</a>
+                {{ message|safe }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    <div class="panel space-4">
+        <div class="panel-header">
+          Survey
+        </div>
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2">
+                <form id="survey_options_form" action="/survey_options/{{ survey.id }}/" method="post" novalidate>
+                    {% csrf_token %}
+                    <div class="row control-group">
+                        <div class="form-group col-xs-12 floating-label-form-group controls {% if survey.name %}floating-label-form-group-with-value{% endif %}">
+                            <label>Survey Name</label>
+                            <input type="text" class="form-control" placeholder="Survey Name" name="survey_name" value="{{ survey.name }}" required data-validation-required-message="Please enter the survey name.">
+                            <p class="help-block text-danger"></p>
+                        </div>
+                    </div>
+                    <div class="row control-group">
+                        <div class="form-group col-xs-12">
+                            <input id="checkbox_active" data-onstyle="info" data-offstyle="danger" type="checkbox" {% if survey.active %}checked{% endif %} data-toggle="toggle" data-on="Active" data-off="Disabled">
+                            <input id="survey_active" name="survey_active" type="hidden" />
+                        </div>
+                    </div>
+                    <br>
+                    <div id="success"></div>
+                    <div class="row">
+                        <div class="form-group col-xs-12">
+                            <button id="save_button" type="button" class="btn btn-danger btn-lg">Guardar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+{% block scripts %}
+
+<script>
+$('#save_button').click(function () {
+    if($('#checkbox_active').prop("checked")){
+        $('#survey_active').val(true);
+    }else{
+        $('#survey_active').val(false);
+    }
+    $('#survey_options_form').submit();
+});
+</script>
+
+{% endblock %}

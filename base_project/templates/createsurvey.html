@@ -161,8 +161,9 @@
             data : {'csrfmiddlewaretoken': '{{csrf_token}}', 'dict': JSON.stringify(dict)},
             success: function(data, textStatus, jqXHR)
             {
-                //data - response from server
-                console.log("ok");
+                if (data['status'] == 1){
+                    window.location.replace("/my_account?status=1");
+                }
             },
             error: function (jqXHR, textStatus, errorThrown)
             {
