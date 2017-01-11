@@ -1,0 +1,12 @@
+<div class="question">
+    <div class="row control-group">
+        <div class="form-group col-xs-12 floating-label-form-group controls text_question">
+            <label>Question</label>
+            {{ question.question_description }}
+            <p class="help-block text-danger"></p>
+        </div>
+        <div class="form-group col-xs-12 answer_question">
+            <input type="number" name="question_{{ question.id }}" class="form-control"/>
+        </div>
+    </div>
+</div>

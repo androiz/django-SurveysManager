@@ -20,7 +20,8 @@ from django.contrib.auth.decorators import login_required
 from django.conf.urls.static import static
 
 from base_project.views import Home, SignUp, Login, Logout, MyAccount, \
-    EditProfile, ChangeImage, ChangePassword, CreateSurvey, SurveyOptionsSurvey, DeleteSurvey
+    EditProfile, ChangeImage, ChangePassword, CreateSurvey, SurveyOptionsSurvey, DeleteSurvey, SurveyOptionsQuestions, \
+    SurveyView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -34,6 +35,9 @@ urlpatterns = [
     url(r'^change_password/$', login_required(ChangePassword.as_view())),
 
     url(r'^survey_options/(?P<id>\d+)/$', login_required(SurveyOptionsSurvey.as_view())),
+    url(r'^survey_questions/(?P<id>\d+)/$', login_required(SurveyOptionsQuestions.as_view())),
+
+    url(r'^survey/(?P<id>\d+)/$', login_required(SurveyView.as_view())),
     url(r'^delete_survey/(?P<id>\d+)/$', login_required(DeleteSurvey.as_view())),
 
     url(r'^sign_up/$', SignUp.as_view()),

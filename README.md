@@ -1,11 +1,5 @@
 # django-SurveysManager
-This project is a django base-project. It's useful so as to start a project because you have well 
-developed a module for signup & login with an user-extended profile. Functionalities in the project 
-include: 
-
-* A signup/login system.
-* An user profile with avatar.
-* A user-friendly interface based on Boostrap.
+This project contains the necessary code for implementing a new survey manager application.
 
 ## Installation
 
@@ -42,6 +36,7 @@ an activation email) so that the superuser should activate manually to make them
 * Front-end Libraries & Frameworks:
   - Bootstrap
   - Bootstrap-datepicker
+  - Bootstrap-toggle
   - Fileinput
   - jquery.js
 

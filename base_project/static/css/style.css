@@ -137,3 +137,45 @@ ul.sidenav-list li.active{
 .question h2{
     padding-top: 10px;
 }
+
+/* Survey */
+
+#survey .question .form-group{
+    color: #484848;
+}
+
+
+#survey .panel-header {
+    background-color: #edefed;
+}
+
+#survey .panel-header {
+    color: #484848;
+    font-size: 16px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #dce0e0;
+}
+
+#survey .panel-header {
+    color: #484848;
+    font-size: 16px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #dce0e0;
+}
+
+#survey .panel-header, .panel-body, ul.panel-body>li, ol.panel-body>li, .panel-footer {
+    position: relative;
+    margin: 0;
+    padding: 20px;
+    border-top: 1px solid #dce0e0;
+}
+
+#survey .form-group {
+    margin-bottom: 15px;
+}
+
+#survey .question .form-group{
+    color: #484848;
+}

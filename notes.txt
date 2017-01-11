@@ -4,6 +4,7 @@
 - Front-end Libraries & Frameworks:
   Bootstrap
   Bootstrap-datepicker
+  Bootstrap-toggle
   Fileinput
   jquery.js
 

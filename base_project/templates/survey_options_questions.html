@@ -1,0 +1,68 @@
+{% extends "survey_options.html" %}
+{% load staticfiles%}
+
+{% block title %}Survey{% endblock %}
+
+{% block edit_survey_options %}
+<div class="col-md-9">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-{{ message.tags }}{% endif %}">  <!-- singular -->
+                <a class="close" data-dismiss="alert">×</a>
+                {{ message|safe }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    <div class="panel space-4">
+        <div class="panel-header">
+          Questions
+        </div>
+
+        <!-- Questions -->
+        <div class="row">
+            <div class="col-lg-10 col-lg-offset-1">
+                {% for question in questions %}
+                <!-- Question -->
+                <div class="question question_1">
+                    <div class="row control-group">
+                        <div class="form-group col-xs-2"><h2>#{{forloop.counter}}</h2></div>
+                        <div class="form-group col-xs-10 controls">
+                          <label for="sel1">Question Type:</label>
+                          <select class="form-control question_type question_type_{{forloop.counter}}" disabled>
+                              {% for key,value in widget_types.items %}
+                                <option {% if question.question_type == key %}selected{% endif %} value="{{ key }}">{{ value }}</option>
+                              {% endfor %}
+                          </select>
+                        </div>
+                    </div>
+                    <div class="row control-group">
+                        <div class="form-group col-xs-2"></div>
+                        <div class="form-group col-xs-10 controls">
+                          <label>Description:</label>
+                          <textarea disabled class="form-control question_description" rows="3">{{ question.question_description }}</textarea>
+                        </div>
+                    </div>
+                    <div class="row control-group question_options_{{forloop.counter}}">
+                        <div class="form-group col-xs-2"></div>
+                        <div class="form-group col-xs-10 controls">
+                            <div class="alert alert-info" role="alert">
+                                Please, write all options separated by <strong>comma (,)</strong> if you are
+                                setting up a <strong>select</strong> or <strong>checkbox</strong> widget.
+                            </div>
+                            <label>Options:</label>
+                            <input type="text" class="form-control question_options" value="{{ question.question_options }}" disabled>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <!-- EndQuestions -->
+    </div>
+</div>
+
+{% endblock %}
+{% block scripts %}
+
+
+{% endblock %}

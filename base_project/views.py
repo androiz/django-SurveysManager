@@ -8,7 +8,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from base_project.models import UserProfile, Survey, Question
 from base_project.forms import SurveyForm
-from base_project.constants import CHECKBOX, SELECT, INTEGER, TEXT, YES_NO
+from base_project.constants import CHECKBOX, SELECT, INTEGER, TEXT, YES_NO, WIDGET_TYPES
 
 from django.contrib import messages
 
@@ -318,6 +318,23 @@ class SurveyOptionsSurvey(TemplateView):
         messages.success(request, "<strong>Exito!</strong> La imagen se ha guardado correctamente.")
         return render(request, template_name=self.template_name, context=context)
 
+class SurveyOptionsQuestions(TemplateView):
+    template_name = "survey_options_questions.html"
+
+    def get(self, request, id):
+        user = request.user
+        survey = Survey.objects.get(user=user, pk=id)
+        questions = Question.objects.filter(survey=survey)
+
+        context = {
+            'user': user,
+            'survey': survey,
+            'questions': questions,
+            'widget_types': WIDGET_TYPES
+        }
+
+        return render(request, template_name=self.template_name, context=context)
+
 class DeleteSurvey(TemplateView):
 
     def get(self, request, id):
@@ -327,3 +344,27 @@ class DeleteSurvey(TemplateView):
 
         messages.success(request, "<strong>Exito!</strong> La encuesta ha sido eliminada correctamente.")
         return HttpResponseRedirect('/my_account')
+
+
+class SurveyView(TemplateView):
+    template_name = "survey.html"
+
+    def get(self, request, id):
+        user = request.user
+        survey = Survey.objects.get(user=user, pk=id)
+        questions = Question.objects.filter(survey=survey)
+
+        TYPES = [SELECT, CHECKBOX]
+
+        for x in questions:
+            if x.question_type in TYPES:
+                x.options = x.question_options.split(",")
+
+        context = {
+            'user': user,
+            'survey': survey,
+            'questions': questions,
+            'widget_types': WIDGET_TYPES
+        }
+
+        return render(request, template_name=self.template_name, context=context)
