@@ -179,3 +179,8 @@ ul.sidenav-list li.active{
 #survey .question .form-group{
     color: #484848;
 }
+
+.btn-space{
+    width: 5px;
+    height: 5px;
+}

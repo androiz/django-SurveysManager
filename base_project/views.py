@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.db.models import Max
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.shortcuts import redirect
@@ -6,7 +7,7 @@ from django.views.generic import TemplateView
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from base_project.models import UserProfile, Survey, Question
+from base_project.models import UserProfile, Survey, Question, Answer
 from base_project.forms import SurveyForm
 from base_project.constants import CHECKBOX, SELECT, INTEGER, TEXT, YES_NO, WIDGET_TYPES
 
@@ -335,6 +336,34 @@ class SurveyOptionsQuestions(TemplateView):
 
         return render(request, template_name=self.template_name, context=context)
 
+class SurveyOptionsData(TemplateView):
+    template_name = "survey_options_data.html"
+
+    def get(self, request, id):
+        user = request.user
+        survey = Survey.objects.get(user=user, pk=id)
+        questions = Question.objects.filter(survey=survey)
+        unclassified_answers = Answer.objects.filter(survey=survey)
+
+        answers = dict()
+        for x in unclassified_answers:
+            if x.answer_group in answers.keys():
+                answers[x.answer_group].append(x)
+            else:
+                answers[x.answer_group] = [x]
+
+        for key, elem in answers.items():
+            answers[key] = sorted(elem, key=lambda x: x.question.id)
+
+        context = {
+            'user': user,
+            'survey': survey,
+            'questions': questions,
+            'answers': answers
+        }
+
+        return render(request, template_name=self.template_name, context=context)
+
 class DeleteSurvey(TemplateView):
 
     def get(self, request, id):
@@ -345,13 +374,11 @@ class DeleteSurvey(TemplateView):
         messages.success(request, "<strong>Exito!</strong> La encuesta ha sido eliminada correctamente.")
         return HttpResponseRedirect('/my_account')
 
-
 class SurveyView(TemplateView):
     template_name = "survey.html"
 
     def get(self, request, id):
-        user = request.user
-        survey = Survey.objects.get(user=user, pk=id)
+        survey = Survey.objects.get(pk=id)
         questions = Question.objects.filter(survey=survey)
 
         TYPES = [SELECT, CHECKBOX]
@@ -361,10 +388,46 @@ class SurveyView(TemplateView):
                 x.options = x.question_options.split(",")
 
         context = {
-            'user': user,
             'survey': survey,
             'questions': questions,
             'widget_types': WIDGET_TYPES
         }
 
         return render(request, template_name=self.template_name, context=context)
+
+    def post(self, request, id):
+        survey = Survey.objects.get(pk=id)
+
+        max_group = Answer.objects.all().aggregate(Max('answer_group'))['answer_group__max']
+        if max_group is not None:
+            max_group = max_group + 1
+        else:
+            max_group = 0
+
+        checkbox_answers = dict()
+
+        for key, value in request.POST.items():
+            ql = key.split('_')
+            if ql[0] == 'question':
+                q_id = int(ql[1])
+                q = Question.objects.get(pk=q_id, survey=survey)
+                if q.question_type != CHECKBOX:
+                    answer = Answer.objects.create(survey=survey, question=q, answer_group=max_group, answer=value)
+                else:
+                    num_options = len(q.question_options.split(","))
+                    if ql[0]+"_"+ql[1] in checkbox_answers.keys():
+                        checkbox_answers[ql[0] + "_" + ql[1]][int(ql[3])-1] = 1
+                    else:
+                        checkbox_answers[ql[0] + "_" + ql[1]] = [0] * num_options
+                        checkbox_answers[ql[0] + "_" + ql[1]][int(ql[3]) - 1] = 1
+
+        # CHECKBOX Question
+        for key, value in checkbox_answers.items():
+            ql = key.split('_')
+            q_id = int(ql[1])
+            q = Question.objects.get(pk=q_id, survey=survey)
+            checkbox_answer = str(value).strip('[]')
+            answer = Answer.objects.create(survey=survey, question=q, answer_group=max_group, answer=checkbox_answer)
+
+        return redirect('/my_account')
+

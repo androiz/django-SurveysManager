@@ -18,27 +18,32 @@
             </div>
             <div class="col-md-8">
                 <div class="panel space-4">
-                    <div class="panel-header">
-                      {{ survey.name }}
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-8 col-lg-offset-2">
-                            {% for question in questions %}
-                                {% if question.question_type == 'text' %}
-                                    {% include "widgets/text_widget.html" %}
-                                {% elif question.question_type == 'integer'%}
-                                    {% include "widgets/integer_widget.html" %}
-                                {% elif question.question_type == 'checkbox'%}
-                                    {% include "widgets/checkbox_widget.html" %}
-                                {% endif %}
-                            {% endfor %}
+                    <form action="/survey/{{ survey.id }}/" method="post">
+                    {% csrf_token %}
+                        <div class="panel-header">
+                          {{ survey.name }}
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-1 col-lg-offset-10">
-                            <button type="submit" class="btn btn-success btn-lg">Save</button>
+                        <div class="row">
+                            <div class="col-lg-8 col-lg-offset-2">
+                                {% for question in questions %}
+                                    {% if question.question_type == 'text' %}
+                                        {% include "widgets/text_widget.html" %}
+                                    {% elif question.question_type == 'integer'%}
+                                        {% include "widgets/integer_widget.html" %}
+                                    {% elif question.question_type == 'checkbox'%}
+                                        {% include "widgets/checkbox_widget.html" %}
+                                    {% elif question.question_type == 'select'%}
+                                        {% include "widgets/select_widget.html" %}
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
                         </div>
-                    </div>
+                        <div class="row">
+                            <div class="col-lg-1 col-lg-offset-10">
+                                <button type="submit" class="btn btn-success btn-lg">Save</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

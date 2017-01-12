@@ -1,0 +1,54 @@
+{% extends "survey_options.html" %}
+{% load staticfiles%}
+
+{% block title %}Data{% endblock %}
+
+{% block edit_survey_options %}
+<div class="col-md-9">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-{{ message.tags }}{% endif %}">  <!-- singular -->
+                <a class="close" data-dismiss="alert">×</a>
+                {{ message|safe }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    <div class="panel space-4">
+        <div class="panel-header">
+          Data
+            <a href="#" class="btn btn-danger btn-sm pull-right">CSV</a>
+            <a href="#" class="btn btn-danger btn-sm pull-right">PDF</a>
+        </div>
+        <div class="row">
+            <div class="col-lg-10 col-lg-offset-1">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <th>
+                            {% for question in questions %}
+                              <th>{{ question.question_description }}</th>
+                            {% endfor %}
+                            </th>
+                        </thead>
+                        <tbody>
+                            {% for key, values in answers.items %}
+                            <tr>
+                              <td>#{{ key }}</td>
+                              {% for answer in values %}
+                              <td>{{ answer.answer }}</td>
+                              {% endfor %}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+{% block scripts %}
+
+
+{% endblock %}
