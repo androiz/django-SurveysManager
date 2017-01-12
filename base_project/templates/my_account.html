@@ -106,7 +106,7 @@
                                 </div>
                                 <a href="/survey/{{ survey.id }}" class="link-reset text-muted">
                                   <div class="col-md-5">
-                                    http://surveysmanager.com/survey/{{ survey.id }}
+                                    {{ request.META.HTTP_HOST }}/survey/{{ survey.id }}
                                   </div>
                                 </a>
                                 <div class="col-md-2">
