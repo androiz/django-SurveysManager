@@ -18,17 +18,17 @@
 
               <div class="panel space-4">
                 <div class="panel-header">
-                    Perfil
+                    Profile
                 </div>
                 <div class="sidenav">
                   <ul class="sidenav-list list-unstyled">
-                    <li class="active">
+                    <li {% if selected_option == "profile" %}class="active"{% endif %}>
                         <a href="/edit_profile">Editar Perfil</a>
                     </li>
-                    <li>
+                    <li {% if selected_option == "image" %}class="active"{% endif %}>
                         <a href="/change_image">Cambiar Imagen</a>
                     </li>
-                    <li>
+                    <li {% if selected_option == "password" %}class="active"{% endif %}>
                         <a href="/change_password">Cambiar Contraseña</a>
                     </li>
                   </ul>

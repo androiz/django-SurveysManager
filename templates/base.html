@@ -18,7 +18,7 @@
     <!-- Custom Style-->
     <link href="{% static "css/style.css" %}" rel="stylesheet">
 
-    <title>{% block title %}Social Language{% endblock %}</title>
+    <title>{% block title %}Survey Manager{% endblock %}</title>
 </head>
 
 <body id="page-top" class="index">
@@ -30,7 +30,7 @@
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                     <span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i>
                 </button>
-                <a class="navbar-brand" href="#page-top">Start Bootstrap</a>
+                <a class="navbar-brand" href="#page-top">Survey Manager</a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -44,7 +44,7 @@
                     </li>
                     {% if request.user.is_authenticated %}
                     <li class="page-scroll">
-                        <a href="/my_account">Mi Cuenta</a>
+                        <a href="/my_account">My Account</a>
                     </li>
                     <li class="page-scroll">
                         <a href="/logout">Logout</a>
@@ -52,10 +52,10 @@
                     {% endif %}
                     {% if not request.user.is_authenticated %}
                     <li class="page-scroll">
-                        <a href="/sign_up">Registrate</a>
+                        <a href="/sign_up">Sign Up</a>
                     </li>
                     <li class="page-scroll">
-                        <a href="/login">Login</a>
+                        <a href="/login">Log In</a>
                     </li>
                     {% endif %}
                 </ul>

@@ -168,7 +168,8 @@ class EditProfile(TemplateView):
             'update_success': False,
             'first_name': user.first_name,
             'last_name': user.last_name,
-            'email': user.email
+            'email': user.email,
+            'selected_option': 'profile'
         }
 
         return render(request, template_name=self.template_name, context=context)
@@ -214,7 +215,8 @@ class ChangeImage(TemplateView):
         user_profile = UserProfile.objects.get(user=user)
 
         context = {
-            'profile': user_profile
+            'profile': user_profile,
+            'selected_option': 'image'
         }
 
         return render(request, template_name=self.template_name, context=context)
@@ -247,6 +249,14 @@ class ChangeImage(TemplateView):
 class ChangePassword(TemplateView):
     template_name = "change_password.html"
 
+    def get(self, request, *args, **kwargs):
+
+        context = {
+            'selected_option': 'password'
+        }
+
+        return render(request, template_name=self.template_name, context=context)
+
     def post(self, request):
 
         last_password = request.POST.get('last_password')
@@ -256,7 +266,6 @@ class ChangePassword(TemplateView):
         user = request.user
 
         context = {
-
         }
 
         if last_password and new_password_1 and new_password_2:
@@ -294,7 +303,8 @@ class SurveyOptionsSurvey(TemplateView):
 
         context = {
             'user': user,
-            'survey': survey
+            'survey': survey,
+            'selected_option': 'survey'
         }
 
         return render(request, template_name=self.template_name, context=context)
@@ -331,7 +341,8 @@ class SurveyOptionsQuestions(TemplateView):
             'user': user,
             'survey': survey,
             'questions': questions,
-            'widget_types': WIDGET_TYPES
+            'widget_types': WIDGET_TYPES,
+            'selected_option': 'questions'
         }
 
         return render(request, template_name=self.template_name, context=context)
@@ -359,7 +370,8 @@ class SurveyOptionsData(TemplateView):
             'user': user,
             'survey': survey,
             'questions': questions,
-            'answers': answers
+            'answers': answers,
+            'selected_option': 'data'
         }
 
         return render(request, template_name=self.template_name, context=context)
@@ -379,26 +391,29 @@ class SurveyView(TemplateView):
 
     def get(self, request, id):
         survey = Survey.objects.get(pk=id)
-        questions = Question.objects.filter(survey=survey)
+        if survey.active:
+            questions = Question.objects.filter(survey=survey)
 
-        TYPES = [SELECT, CHECKBOX]
+            TYPES = [SELECT, CHECKBOX]
 
-        for x in questions:
-            if x.question_type in TYPES:
-                x.options = x.question_options.split(",")
+            for x in questions:
+                if x.question_type in TYPES:
+                    x.options = x.question_options.split(",")
 
-        context = {
-            'survey': survey,
-            'questions': questions,
-            'widget_types': WIDGET_TYPES
-        }
+            context = {
+                'survey': survey,
+                'questions': questions,
+                'widget_types': WIDGET_TYPES
+            }
 
-        return render(request, template_name=self.template_name, context=context)
+            return render(request, template_name=self.template_name, context=context)
+        else:
+            return redirect("/")
 
     def post(self, request, id):
         survey = Survey.objects.get(pk=id)
 
-        max_group = Answer.objects.all().aggregate(Max('answer_group'))['answer_group__max']
+        max_group = Answer.objects.filter(survey=survey).aggregate(Max('answer_group'))['answer_group__max']
         if max_group is not None:
             max_group = max_group + 1
         else:

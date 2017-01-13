@@ -22,13 +22,13 @@
                 </div>
                 <div class="sidenav">
                   <ul class="sidenav-list list-unstyled">
-                    <li class="active">
+                    <li {% if selected_option == "survey" %}class="active"{% endif %}>
                         <a href="/survey_options/{{ survey.id }}">Survey</a>
                     </li>
-                    <li>
+                    <li {% if selected_option == "questions" %}class="active"{% endif %}>
                         <a href="/survey_questions/{{ survey.id }}">Questions</a>
                     </li>
-                    <li>
+                    <li {% if selected_option == "data" %}class="active"{% endif %}>
                         <a href="/survey_data/{{ survey.id }}">Show Data</a>
                     </li>
                   </ul>
