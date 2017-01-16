@@ -34,6 +34,8 @@
                                         {% include "widgets/checkbox_widget.html" %}
                                     {% elif question.question_type == 'select'%}
                                         {% include "widgets/select_widget.html" %}
+                                    {% elif question.question_type == 'radio'%}
+                                        {% include "widgets/radio_widget.html" %}
                                     {% endif %}
                                 {% endfor %}
                             </div>

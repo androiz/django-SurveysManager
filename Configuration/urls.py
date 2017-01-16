@@ -21,7 +21,7 @@ from django.conf.urls.static import static
 
 from base_project.views import Home, SignUp, Login, Logout, MyAccount, \
     EditProfile, ChangeImage, ChangePassword, CreateSurvey, SurveyOptionsSurvey, DeleteSurvey, SurveyOptionsQuestions, \
-    SurveyView, SurveyOptionsData
+    SurveyView, SurveyOptionsData, exportCSV
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -40,6 +40,7 @@ urlpatterns = [
 
     url(r'^survey/(?P<id>\d+)/$', SurveyView.as_view()),
     url(r'^delete_survey/(?P<id>\d+)/$', login_required(DeleteSurvey.as_view())),
+    url(r'^exportCSV/(?P<id>\d+)/$', login_required(exportCSV)),
 
     url(r'^sign_up/$', SignUp.as_view()),
     url(r'^login/$', Login.as_view()),

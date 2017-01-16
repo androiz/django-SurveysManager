@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import csv
+
 from django.db.models import Max
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
@@ -9,7 +11,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from base_project.models import UserProfile, Survey, Question, Answer
 from base_project.forms import SurveyForm
-from base_project.constants import CHECKBOX, SELECT, INTEGER, TEXT, YES_NO, WIDGET_TYPES
+from base_project.constants import CHECKBOX, SELECT, INTEGER, TEXT, YES_NO, WIDGET_TYPES, RADIO
 
 from django.contrib import messages
 
@@ -137,7 +139,7 @@ class CreateSurvey(TemplateView):
             QUESTION_DESCRIPTION_N = "question_description_" + str(i)
             QUESTION_OPTIONS_N = "question_options_" + str(i)
 
-            TYPES = [SELECT, CHECKBOX]
+            TYPES = [SELECT, CHECKBOX, RADIO]
 
             question_type = survey['question_type'][QUESTION_TYPE_N]
             question_description = survey['question_description'][QUESTION_DESCRIPTION_N]
@@ -394,7 +396,7 @@ class SurveyView(TemplateView):
         if survey.active:
             questions = Question.objects.filter(survey=survey)
 
-            TYPES = [SELECT, CHECKBOX]
+            TYPES = [SELECT, CHECKBOX, RADIO]
 
             for x in questions:
                 if x.question_type in TYPES:
@@ -446,3 +448,31 @@ class SurveyView(TemplateView):
 
         return redirect('/my_account')
 
+
+def exportCSV(request, id):
+    user = request.user
+    survey = Survey.objects.get(user=user, pk=id)
+    questions = Question.objects.filter(survey=survey)
+    unclassified_answers = Answer.objects.filter(survey=survey)
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="data.csv"'
+    writer = csv.writer(response)
+
+    first_line = ['Row'] + [x.question_description for x in questions]
+    writer.writerow(first_line)
+
+    answers = dict()
+    for x in unclassified_answers:
+        if x.answer_group in answers.keys():
+            answers[x.answer_group].append(x)
+        else:
+            answers[x.answer_group] = [x]
+
+    for key, elem in answers.items():
+        answers[key] = sorted(elem, key=lambda x: x.question.id)
+
+    for index, key in enumerate(answers.keys()):
+        writer.writerow([str(index)] + [x.answer for x in answers[key]])
+
+    return response
