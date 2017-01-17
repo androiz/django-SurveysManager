@@ -11,6 +11,7 @@ var q = '<div class="question question_#nn"> <div class="row control-group">' +
                 '<option value="integer">Integer</option> ' +
                 '<option value="checkbox">Checkbox</option> ' +
                 '<option value="select">Select</option> ' +
+                '<option value="radio">Radio</option> ' +
                 '</select> ' +
                 '</div> ' +
                 '</div> ' +
@@ -21,7 +22,7 @@ var q = '<div class="question question_#nn"> <div class="row control-group">' +
                 '<textarea class="form-control question_description" rows="3"></textarea> ' +
                 '</div> ' +
                 '</div> ' +
-                '<div class="row control-group question_options_#nn"> ' +
+                '<div class="row control-group options question_options_#nn"> ' +
                 '<div class="form-group col-xs-2"></div> ' +
                 '<div class="form-group col-xs-10 controls"> ' +
                 '<div class="alert alert-info" role="alert">' +
@@ -38,10 +39,24 @@ $("#add_question").click(function () {
     var n = $('.question').length;
     var new_question = q.replace(/#nn/g, n+1);
     $(".question").last().after(new_question);
+    $(".question .question_options_" + (n+1)).hide();
 });
 $("#remove_question").click(function () {
     var n = $('.question').length;
     if (n > 1){
         $('.question').last().remove();
+    }
+});
+
+$('.question_options_1').hide();
+
+$(document).on("change", '.questions .question_type',function () {
+    console.log("asdasd");
+    var val = $(this).val();
+    if (val == 'checkbox' || val == 'radio' || val == 'select') {
+        console.log($(this).closest('.question_options'));
+        $(this).parents('.question').find('.options').show();
+    } else {
+        $(this).parents('.question').find('.options').hide();
     }
 });

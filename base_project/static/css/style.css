@@ -184,3 +184,12 @@ ul.sidenav-list li.active{
     width: 5px;
     height: 5px;
 }
+
+.table-data{
+    margin-top: 10px;
+}
+
+/* Toggle */
+.toggle.btn{
+    margin-top: 10px;
+}
