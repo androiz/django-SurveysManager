@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import csv
+import hashlib
 
 from django.db.models import Max
 from django.http import HttpResponseRedirect, HttpResponse
@@ -9,7 +10,9 @@ from django.views.generic import TemplateView
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from base_project.models import UserProfile, Survey, Question, Answer
+
+from base_project.emails import account_activation_email
+from base_project.models import UserProfile, Survey, Question, Answer, UserTokenActivation
 from base_project.forms import SurveyForm
 from base_project.constants import CHECKBOX, SELECT, INTEGER, TEXT, YES_NO, WIDGET_TYPES, RADIO
 
@@ -51,6 +54,11 @@ class SignUp(TemplateView):
 
                 user_profile = UserProfile.objects.get_or_create(user=u)
 
+                token = hashlib.sha256(u.username).hexdigest()
+                UserTokenActivation.objects.create(user=u, token=token)
+                url = request.META['HTTP_HOST'] + "/activation/" + token + "/"
+                sent_email = account_activation_email(url, u.email)
+
                 messages.success(request, "<strong>Exito!</strong> Te hemos enviado un email de confirmacion para completar tu registro.")
                 return HttpResponseRedirect('/')
             else:
@@ -62,6 +70,20 @@ class SignUp(TemplateView):
             # user was empty
             messages.error(request, "<strong>Error!</strong> No puede haber campos vacios.")
             return render(request, template_name=self.template_name, context=context)
+
+def account_activation(request, token):
+    try:
+        uta = UserTokenActivation.objects.get(token=token)
+        user = User.objects.get(id=uta.user.id)
+        user.is_active = True
+        user.save()
+        uta.delete()
+
+        messages.success(request, "<strong>Exito!</strong> Tu cuenta ha sido activada correctamente.")
+        return HttpResponseRedirect('/')
+    except Exception as e:
+        print e
+        return HttpResponseRedirect('/')
 
 class Login(TemplateView):
     template_name = "login.html"
@@ -447,7 +469,6 @@ class SurveyView(TemplateView):
             answer = Answer.objects.create(survey=survey, question=q, answer_group=max_group, answer=checkbox_answer)
 
         return redirect('/my_account')
-
 
 def exportCSV(request, id):
     user = request.user

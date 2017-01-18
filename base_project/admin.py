@@ -1,5 +1,6 @@
 from django.contrib import admin
-from base_project.models import UserProfile, Survey, Question, Answer
+from base_project.models import UserProfile, Survey, Question, Answer, UserTokenActivation
+
 
 # Register your models here.
 
@@ -19,3 +20,7 @@ class QuestionAdmin(admin.ModelAdmin):
 @admin.register(Answer)
 class AnswerAdmin(admin.ModelAdmin):
     list_display = ('id', 'survey', 'question', 'answer_group')
+
+@admin.register(UserTokenActivation)
+class UserTokenActivationAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'token')
