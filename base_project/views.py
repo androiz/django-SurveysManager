@@ -1,26 +1,27 @@
 # -*- coding: utf-8 -*-
 import csv
 import hashlib
+import json
+import logging
 
 from django.db.models import Max
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.views.generic import TemplateView
-
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
+from django.contrib import messages
+from django.conf import settings
 
 from base_project.emails import account_activation_email
 from base_project.models import UserProfile, Survey, Question, Answer, UserTokenActivation
 from base_project.forms import SurveyForm
 from base_project.constants import CHECKBOX, SELECT, INTEGER, TEXT, YES_NO, WIDGET_TYPES, RADIO
 
-from django.contrib import messages
-
-import json
-
 # Create your views here.
+
+logger = logging.getLogger(settings.LOGGING_PREFIX)
 
 class Home(TemplateView):
     template_name = "home.html"
@@ -110,17 +111,16 @@ class Login(TemplateView):
             if user.is_active:
                 # If the account is valid and active, we can log the user in.
                 # We'll send the user back to the homepage.
+                logger.info('User %s logged.' % (user.username))
                 login(request, user)
                 return redirect('/my_account')
             else:
                 # An inactive account was used - no logging in!
-                # return redirect('/login')
                 messages.warning(request, "<strong>Warning!</strong> Es necesario activar la cuenta. \
                 Pulsa <a href='/resend/" + str(user.id) + "/'>aqui</a> para recibir el correo de activacion.")
                 return HttpResponseRedirect('/login')
         else:
             # No backend authenticated the credentials
-            #return redirect('/login')
             messages.error(request, "<strong>Error!</strong> El usuario o la contraseña son incorrectos.")
             return HttpResponseRedirect('/login')
 

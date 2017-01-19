@@ -108,6 +108,30 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# LOGGING CONFIGURATION
+LOGGING_PREFIX = "logger"
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs/info.log'),
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'INFO',
+        },
+        LOGGING_PREFIX: {
+            'handlers': ['console'],
+            'level': 'INFO',
+        }
+    }
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
