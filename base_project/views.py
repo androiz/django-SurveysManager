@@ -85,6 +85,17 @@ def account_activation(request, token):
         print e
         return HttpResponseRedirect('/')
 
+def resend_activation(request, user_id):
+    user = User.objects.get(pk=user_id)
+
+    uta = UserTokenActivation.objects.get(user=user)
+    token = uta.token
+    url = request.META['HTTP_HOST'] + "/activation/" + token + "/"
+    sent_email = account_activation_email(url, user.email)
+
+    messages.success(request, "<strong>Exito!</strong> Te hemos enviado un email de confirmacion para completar tu registro.")
+    return HttpResponseRedirect('/')
+
 class Login(TemplateView):
     template_name = "login.html"
 
@@ -103,10 +114,15 @@ class Login(TemplateView):
                 return redirect('/my_account')
             else:
                 # An inactive account was used - no logging in!
-                return redirect('/login')
+                # return redirect('/login')
+                messages.error(request, "<strong>Error!</strong> Es necesario activar la cuenta. \
+                Pulsa <a href='/resend/" + str(user.id) + "/'>aqui</a> para recibir el correo de activacion.")
+                return HttpResponseRedirect('/login')
         else:
             # No backend authenticated the credentials
-            return redirect('/login')
+            #return redirect('/login')
+            messages.error(request, "<strong>Error!</strong> El usuario o la contraseña son incorrectos.")
+            return HttpResponseRedirect('/login')
 
 class Logout(TemplateView):
     template_name = "login.html"

@@ -21,7 +21,7 @@ from django.conf.urls.static import static
 
 from base_project.views import Home, SignUp, Login, Logout, MyAccount, \
     EditProfile, ChangeImage, ChangePassword, CreateSurvey, SurveyOptionsSurvey, DeleteSurvey, SurveyOptionsQuestions, \
-    SurveyView, SurveyOptionsData, exportCSV, account_activation
+    SurveyView, SurveyOptionsData, exportCSV, account_activation, resend_activation
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -46,5 +46,6 @@ urlpatterns = [
     url(r'^login/$', Login.as_view()),
     url(r'^logout/$', login_required(Logout.as_view())),
     url(r'^activation/(?P<token>\w+)/$', account_activation),
+    url(r'^resend/(?P<user_id>\d+)/$', resend_activation),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
