@@ -59,7 +59,7 @@ class SignUp(TemplateView):
                 url = request.META['HTTP_HOST'] + "/activation/" + token + "/"
                 sent_email = account_activation_email(url, u.email)
 
-                messages.success(request, "<strong>Exito!</strong> Te hemos enviado un email de confirmacion para completar tu registro.")
+                messages.success(request, "<strong>Warning!</strong> Te hemos enviado un email de confirmacion para completar tu registro.")
                 return HttpResponseRedirect('/')
             else:
                 # user was retrieved
@@ -115,7 +115,7 @@ class Login(TemplateView):
             else:
                 # An inactive account was used - no logging in!
                 # return redirect('/login')
-                messages.error(request, "<strong>Error!</strong> Es necesario activar la cuenta. \
+                messages.warning(request, "<strong>Warning!</strong> Es necesario activar la cuenta. \
                 Pulsa <a href='/resend/" + str(user.id) + "/'>aqui</a> para recibir el correo de activacion.")
                 return HttpResponseRedirect('/login')
         else:
