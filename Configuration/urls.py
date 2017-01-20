@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from Configuration import settings
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 from django.conf.urls.static import static
@@ -47,5 +47,7 @@ urlpatterns = [
     url(r'^logout/$', login_required(Logout.as_view())),
     url(r'^activation/(?P<token>\w+)/$', account_activation),
     url(r'^resend/(?P<user_id>\d+)/$', resend_activation),
+
+    url(r'^rosetta/', include('rosetta.urls')),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
