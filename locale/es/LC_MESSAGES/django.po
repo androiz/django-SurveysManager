@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-20 17:50+0100\n"
-"PO-Revision-Date: 2017-01-20 16:50+0000\n"
+"POT-Creation-Date: 2017-01-20 19:18+0100\n"
+"PO-Revision-Date: 2017-01-20 18:19+0000\n"
 "Last-Translator:   <androiz10@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -19,22 +19,30 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Translated-Using: django-rosetta 0.7.12\n"
 
-#: Configuration/settings.py:144
+#: Configuration/settings.py:151
 msgid "English"
-msgstr ""
+msgstr "Inglés"
 
-#: Configuration/settings.py:145
-msgid "French"
-msgstr ""
-
-#: Configuration/settings.py:146
+#: Configuration/settings.py:152
 msgid "Spanish"
-msgstr ""
+msgstr "Español"
 
-#: Configuration/settings.py:147
-msgid "Russian"
-msgstr ""
-
-#: base_project/templates/home.html:24
+#: base_project/templates/home.html:25
 msgid "Surveys"
 msgstr "Encuestas"
+
+#: templates/base.html:49
+msgid "My Account"
+msgstr "Mi Cuenta"
+
+#: templates/base.html:52
+msgid "Logout"
+msgstr "Salir"
+
+#: templates/base.html:57
+msgid "Sign Up"
+msgstr "Registrarse"
+
+#: templates/base.html:60
+msgid "Log In"
+msgstr "Iniciar Sesión"

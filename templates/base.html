@@ -1,4 +1,6 @@
 {% load static %}
+{% load i18n %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -44,18 +46,18 @@
                     </li>
                     {% if request.user.is_authenticated %}
                     <li class="page-scroll">
-                        <a href="/my_account">My Account</a>
+                        <a href="/my_account">{% trans "My Account" %}</a>
                     </li>
                     <li class="page-scroll">
-                        <a href="/logout">Logout</a>
+                        <a href="/logout">{% trans "Logout" %}</a>
                     </li>
                     {% endif %}
                     {% if not request.user.is_authenticated %}
                     <li class="page-scroll">
-                        <a href="/sign_up">Sign Up</a>
+                        <a href="/sign_up">{% trans "Sign Up" %}</a>
                     </li>
                     <li class="page-scroll">
-                        <a href="/login">Log In</a>
+                        <a href="/login">{% trans "Log In" %}</a>
                     </li>
                     {% endif %}
                     <li class="page-scroll">
