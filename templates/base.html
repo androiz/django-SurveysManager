@@ -34,7 +34,7 @@
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <li class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
                     <li class="hidden">
                         <a href="#page-top"></a>
@@ -58,6 +58,16 @@
                         <a href="/login">Log In</a>
                     </li>
                     {% endif %}
+                    <li class="page-scroll">
+                        <form action="/i18n/setlang/" method="post" class="form-inline">{% csrf_token %}
+                            <input name="next" type="hidden" value="/" />
+                            <select name="language" class="form-control" onchange="this.form.submit()">
+                            {% for lang in LANGUAGES %}
+                                <option value="{{ lang.0 }}" {% if request.LANGUAGE_CODE == lang.0 %} selected {% endif %}>{{ lang.1 }}</option>
+                            {% endfor %}
+                            </select>
+                        </form>
+                    </li>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->

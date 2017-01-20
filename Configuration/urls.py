@@ -49,5 +49,6 @@ urlpatterns = [
     url(r'^resend/(?P<user_id>\d+)/$', resend_activation),
 
     url(r'^rosetta/', include('rosetta.urls')),
+    url(r'^i18n/', include('django.conf.urls.i18n')),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

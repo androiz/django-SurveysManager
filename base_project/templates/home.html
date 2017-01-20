@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load staticfiles%}
+{% load i18n %}
 
 {% block title %}My amazing blog{% endblock %}
 
@@ -21,7 +22,7 @@
                 <div class="intro-text">
                     <span class="name">Survey Manager</span>
                     <hr class="star-light">
-                    <span class="skills">Surveys - Big Data - Management</span>
+                    <span class="skills">{% trans "Surveys" %} - Big Data - Management</span>
                 </div>
             </div>
         </div>
