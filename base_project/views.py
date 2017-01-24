@@ -452,7 +452,7 @@ class SurveyOptionCharts(TemplateView):
             chart['description'] = q.question_description
             chart['range_values'] = range_values
             integer_charts.append(chart)
-        
+
 
         context = {
             'user': user,
