@@ -30,7 +30,7 @@
 
 {% endblock %}
 {% block scripts %}
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script src="{% static "js/google_charts.js" %}"></script>
 
 {% for chart in integer_charts %}
 <script>
