@@ -3,6 +3,9 @@ import csv
 import hashlib
 import json
 import logging
+import math
+
+from collections import OrderedDict
 
 from django.db.models import Max
 from django.http import HttpResponseRedirect, HttpResponse
@@ -412,6 +415,51 @@ class SurveyOptionsData(TemplateView):
             'questions': questions,
             'answers': answers,
             'selected_option': 'data'
+        }
+
+        return render(request, template_name=self.template_name, context=context)
+
+class SurveyOptionCharts(TemplateView):
+    template_name = "survey_options_charts.html"
+
+    def get(self, request, id):
+        user = request.user
+        survey = Survey.objects.get(user=user, pk=id)
+        questions = Question.objects.filter(survey=survey, question_type=INTEGER)
+
+        integer_charts = list()
+        for q in questions:
+            chart = dict()
+            answers = Answer.objects.filter(question=q)
+            answer_values = sorted([int(x.answer) for x in answers])
+
+            first = answer_values[0]
+            last = answer_values[-1]
+            step = math.floor((last-first)/5)
+
+            ranges = [
+                (int(first), int(first+step)),
+                (int(first+step), int(first+(step*2))),
+                (int(first+(step*2)), int(first+(step*3))),
+                (int(first+(step*3)), int(first+(step*4))),
+                (int(first+(step*4)), int(last))
+            ]
+
+            range_values = [(str(x), len([y for y in answer_values if y >= x[0] and y <= x[1] ])) for x in ranges]
+
+
+            chart['id'] = q.pk
+            chart['description'] = q.question_description
+            chart['range_values'] = range_values
+            integer_charts.append(chart)
+
+        print integer_charts
+
+        context = {
+            'user': user,
+            'survey': survey,
+            'integer_charts': integer_charts,
+            'selected_option': 'charts'
         }
 
         return render(request, template_name=self.template_name, context=context)

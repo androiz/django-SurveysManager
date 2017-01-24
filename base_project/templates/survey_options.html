@@ -31,6 +31,9 @@
                     <li {% if selected_option == "data" %}class="active"{% endif %}>
                         <a href="/survey_data/{{ survey.id }}">Show Data</a>
                     </li>
+                    <li {% if selected_option == "charts" %}class="active"{% endif %}>
+                        <a href="/survey_charts/{{ survey.id }}">Charts</a>
+                    </li>
                   </ul>
                 </div>
                 <a href="/delete_survey/{{ survey.id }}" class="btn btn-danger btn-block">Delete</a>

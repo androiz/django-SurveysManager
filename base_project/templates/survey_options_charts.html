@@ -1,0 +1,69 @@
+{% extends "survey_options.html" %}
+{% load staticfiles%}
+
+{% block title %}Data{% endblock %}
+
+{% block edit_survey_options %}
+
+<div class="col-md-9">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-{{ message.tags }}{% endif %}">  <!-- singular -->
+                <a class="close" data-dismiss="alert">×</a>
+                {{ message|safe }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    <div class="panel space-4">
+        <div class="panel-header">
+          Charts
+        </div>
+        <div class="row">
+            <div class="col-lg-10 col-lg-offset-1">
+                {% for chart in integer_charts %}
+                    <div id="chart_div_{{ forloop.counter }}"></div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+{% block scripts %}
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+{% for chart in integer_charts %}
+<script>
+google.charts.load('current', {packages: ['corechart', 'bar']});
+google.charts.setOnLoadCallback(drawBasic);
+
+function drawBasic() {
+
+    var data = google.visualization.arrayToDataTable([
+        ['Range', 'Values',],
+        {% for elem in chart.range_values %}
+        ['{{ elem.0 }}', {{ elem.1 }}],
+        {% endfor %}
+    ]);
+
+    var options = {
+        title: '{{ chart.description }}',
+        chartArea: {width: '50%'},
+        hAxis: {
+            title: 'Values',
+            minValue: 0
+        },
+        vAxis: {
+            title: 'Range'
+        }
+    };
+
+    var chart = new google.visualization.BarChart(document.getElementById('chart_div_{{ forloop.counter }}'));
+
+    chart.draw(data, options);
+
+}
+</script>
+{% endfor %}
+
+{% endblock %}
