@@ -23,6 +23,9 @@
                 {% for chart in integer_charts %}
                     <div id="chart_div_{{ forloop.counter }}"></div>
                 {% endfor %}
+                {% for chart in radio_charts %}
+                    <div id="donutchart_{{ forloop.counter }}"></div>
+                {% endfor %}
             </div>
         </div>
     </div>
@@ -63,6 +66,30 @@ function drawBasic() {
     chart.draw(data, options);
 
 }
+</script>
+{% endfor %}
+
+{% for chart in radio_charts %}
+<script type="text/javascript">
+  google.charts.load("current", {packages:["corechart"]});
+  google.charts.setOnLoadCallback(drawChart);
+
+  function drawChart() {
+    var data = google.visualization.arrayToDataTable([
+      ['Task', 'Hours per Day'],
+      {% for key, elem in chart.results.items %}
+        ['{{ key|safe }}', {{ elem|safe }}],
+      {% endfor %}
+    ]);
+
+    var options = {
+      title: '{{ chart.description }}',
+      pieHole: 0,
+    };
+
+    var chart = new google.visualization.PieChart(document.getElementById('donutchart_{{ forloop.counter }}'));
+    chart.draw(data, options);
+  }
 </script>
 {% endfor %}
 

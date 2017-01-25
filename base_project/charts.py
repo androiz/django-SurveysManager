@@ -63,3 +63,23 @@ class Charts:
             integer_charts.append(chart)
 
             return integer_charts
+
+    def Radio_Charts(self, questions):
+        radio_charts = list()
+        for q in questions:
+            chart = dict()
+            options = q.question_options.split(',')
+
+            answers = Answer.objects.filter(question=q)
+            results = dict((x, 0) for x in options)
+
+            for answer in answers:
+                a = answer.answer
+                results[a] += 1
+
+            chart['id'] = q.pk
+            chart['description'] = q.question_description
+            chart['results'] = results
+            radio_charts.append(chart)
+
+            return radio_charts

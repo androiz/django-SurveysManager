@@ -426,15 +426,18 @@ class SurveyOptionCharts(TemplateView):
     def get(self, request, id):
         user = request.user
         survey = Survey.objects.get(user=user, pk=id)
-        questions = Question.objects.filter(survey=survey, question_type=INTEGER)
+        integer_questions = Question.objects.filter(survey=survey, question_type=INTEGER)
+        radio_questions = Question.objects.filter(survey=survey, question_type=RADIO)
 
         chart = Charts()
-        integer_charts = chart.Integer_Charts(questions)
+        integer_charts = chart.Integer_Charts(integer_questions)
+        radio_charts = chart.Radio_Charts(radio_questions)
 
         context = {
             'user': user,
             'survey': survey,
             'integer_charts': integer_charts,
+            'radio_charts': radio_charts,
             'selected_option': 'charts'
         }
 
