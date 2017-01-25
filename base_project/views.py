@@ -21,6 +21,7 @@ from base_project.emails import account_activation_email
 from base_project.models import UserProfile, Survey, Question, Answer, UserTokenActivation
 from base_project.forms import SurveyForm
 from base_project.constants import CHECKBOX, SELECT, INTEGER, TEXT, YES_NO, WIDGET_TYPES, RADIO
+from base_project.charts import Charts
 
 # Create your views here.
 
@@ -427,32 +428,8 @@ class SurveyOptionCharts(TemplateView):
         survey = Survey.objects.get(user=user, pk=id)
         questions = Question.objects.filter(survey=survey, question_type=INTEGER)
 
-        integer_charts = list()
-        for q in questions:
-            chart = dict()
-            answers = Answer.objects.filter(question=q)
-            answer_values = sorted([int(x.answer) for x in answers])
-
-            first = answer_values[0]
-            last = answer_values[-1]
-            step = math.floor((last-first)/5)
-
-            ranges = [
-                (int(first), int(first+step)),
-                (int(first+step), int(first+(step*2))),
-                (int(first+(step*2)), int(first+(step*3))),
-                (int(first+(step*3)), int(first+(step*4))),
-                (int(first+(step*4)), int(last))
-            ]
-
-            range_values = [(str(x), len([y for y in answer_values if y >= x[0] and y <= x[1] ])) for x in ranges]
-
-
-            chart['id'] = q.pk
-            chart['description'] = q.question_description
-            chart['range_values'] = range_values
-            integer_charts.append(chart)
-
+        chart = Charts()
+        integer_charts = chart.Integer_Charts(questions)
 
         context = {
             'user': user,

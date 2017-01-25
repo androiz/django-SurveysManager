@@ -42,7 +42,7 @@ function drawBasic() {
     var data = google.visualization.arrayToDataTable([
         ['Range', 'Values',],
         {% for elem in chart.range_values %}
-        ['{{ elem.0 }}', {{ elem.1 }}],
+        ['{{ elem.0|safe }}', {{ elem.1|safe }}],
         {% endfor %}
     ]);
 
