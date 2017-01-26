@@ -2,15 +2,19 @@
     <div class="row control-group">
         <div class="form-group col-xs-12 floating-label-form-group controls text_question">
             <label>Question</label>
-            {{ question.question_description }}
+            <strong>{{ question.question_description }}</strong>
             <p class="help-block text-danger"></p>
         </div>
         <div class="form-group col-xs-12 answer_question">
 
             {% for option in question.options %}
-            <label class="checkbox-inline">
-              <input type="checkbox" name="question_{{ question.id }}_option_{{ forloop.counter }}" value="{{ option }}"> {{ option }}
-            </label>
+{#            <label class="checkbox-inline">#}
+{#              <input type="checkbox" name="question_{{ question.id }}_option_{{ forloop.counter }}" value="{{ option }}"> {{ option }}#}
+{#            </label>#}
+            <span class="button-checkbox">
+                <button type="button" class="btn" data-color="info">{{ option }}</button>
+                <input type="checkbox" class="hidden" name="question_{{ question.id }}_option_{{ forloop.counter }}" value="{{ option }}" />
+            </span>
             {% endfor %}
         </div>
     </div>
