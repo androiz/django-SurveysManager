@@ -1,7 +1,8 @@
 {% extends "edit_account.html" %}
 {% load staticfiles%}
+{% load i18n %}
 
-{% block title %}Change Image{% endblock %}
+{% block title %}{% trans "Change Image" %}{% endblock %}
 
 {% block edit_account_content %}
 <div class="col-md-9">
@@ -15,21 +16,21 @@
     {% endif %}
     <div class="panel space-4">
         <div class="panel-header">
-          Imagen
+          {% trans "Image" %}
         </div>
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2">
                 <form method="post" action="/change_image/" enctype="multipart/form-data" novalidate>
                     {% csrf_token %}
 
-                    <label class="control-label">Select File</label>
+                    <label class="control-label">{% trans "Select File" %}</label>
                     <input id="avatar" name="avatar" type="file" class="file file-loading" data-allowed-file-extensions='["png", "jpg", "jpeg"]'>
 
                     <br>
                     <div id="success"></div>
                     <div class="row">
                         <div class="form-group col-xs-12">
-                            <button type="submit" class="btn btn-danger btn-lg">Guardar</button>
+                            <button type="submit" class="btn btn-danger btn-lg">{% trans "Save" %}</button>
                         </div>
                     </div>
                 </form>

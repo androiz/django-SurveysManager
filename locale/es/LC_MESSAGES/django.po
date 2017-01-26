@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-20 19:18+0100\n"
+"POT-Creation-Date: 2017-01-26 14:21+0000\n"
 "PO-Revision-Date: 2017-01-20 18:19+0000\n"
 "Last-Translator:   <androiz10@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,9 +27,116 @@ msgstr "Inglés"
 msgid "Spanish"
 msgstr "Español"
 
+#: base_project/templates/change_image.html:4
+msgid "Change Image"
+msgstr ""
+
+#: base_project/templates/change_image.html:18
+msgid "Image"
+msgstr ""
+
+#: base_project/templates/change_image.html:25
+msgid "Select File"
+msgstr ""
+
+#: base_project/templates/change_image.html:32
+#: base_project/templates/change_password.html:49
+#: base_project/templates/createsurvey.html:105
+msgid "Save"
+msgstr ""
+
+#: base_project/templates/change_password.html:4
+msgid "Change Password"
+msgstr ""
+
+#: base_project/templates/change_password.html:18
+msgid "Password"
+msgstr ""
+
+#: base_project/templates/change_password.html:26
+msgid "Last Password"
+msgstr ""
+
+#: base_project/templates/change_password.html:27
+msgid "Please enter your last password."
+msgstr ""
+
+#: base_project/templates/change_password.html:33
+msgid "New Password"
+msgstr ""
+
+#: base_project/templates/change_password.html:34
+msgid "Please enter your new password."
+msgstr ""
+
+#: base_project/templates/change_password.html:40
+msgid "Again New Password"
+msgstr ""
+
+#: base_project/templates/change_password.html:41
+msgid "Please enter your new password again."
+msgstr ""
+
+#: base_project/templates/createsurvey.html:4
+#: base_project/templates/createsurvey.html:12
+#, fuzzy
+#| msgid "Surveys"
+msgid "Create Survey"
+msgstr "Encuestas"
+
+#: base_project/templates/createsurvey.html:22
+#, fuzzy
+#| msgid "Surveys"
+msgid "Survey"
+msgstr "Encuestas"
+
+#: base_project/templates/createsurvey.html:29
+msgid "Name"
+msgstr ""
+
+#: base_project/templates/createsurvey.html:43
+msgid "Active"
+msgstr ""
+
+#: base_project/templates/createsurvey.html:56
+msgid "Questions"
+msgstr ""
+
+#: base_project/templates/createsurvey.html:72
+msgid "Text"
+msgstr ""
+
+#: base_project/templates/createsurvey.html:73
+msgid "Numero"
+msgstr ""
+
+#: base_project/templates/createsurvey.html:74
+msgid "Checkbox"
+msgstr ""
+
+#: base_project/templates/createsurvey.html:75
+msgid "Select"
+msgstr ""
+
+#: base_project/templates/createsurvey.html:76
+msgid "Radio"
+msgstr ""
+
+#: base_project/templates/createsurvey.html:83
+msgid "Description"
+msgstr ""
+
+#: base_project/templates/createsurvey.html:94
+msgid "Options"
+msgstr ""
+
 #: base_project/templates/home.html:25
 msgid "Surveys"
 msgstr "Encuestas"
+
+#: base_project/templates/home.html:25
+msgid "Management"
+msgstr ""
 
 #: templates/base.html:49
 msgid "My Account"

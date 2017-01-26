@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 {% load staticfiles%}
+{% load i18n %}
 
-{% block title %}Create Survey{% endblock %}
+{% block title %}{% trans "Create Survey" %}{% endblock %}
 
 
 {% block content %}
@@ -9,7 +10,7 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-12 text-center">
-                <h2>Create Survey</h2>
+                <h2>{% trans "Create Survey" %}</h2>
                 <hr class="star-light">
             </div>
         </div>
@@ -19,14 +20,14 @@
             <div class="col-md-7">
                 <div class="panel space-4">
                     <div class="panel-header">
-                      Survey
+                      {% trans "Survey" %}
                     </div>
                     <div class="row">
                         <div class="col-lg-8 col-lg-offset-2">
                             <div id="survey_info">
                                 <div class="row control-group">
                                     <div class="form-group col-xs-12 floating-label-form-group controls">
-                                        <label>Name</label>
+                                        <label>{% trans "Name" %}</label>
                                         {{ form.name }}
                                         <p class="help-block text-danger"></p>
                                     </div>
@@ -40,7 +41,7 @@
                                                 <span> </span>
                                             </label>
                                             <label for="fancy-checkbox-info" class="btn btn-default active">
-                                                Active
+                                                {% trans "Active" %}
                                             </label>
                                         </div>
 
@@ -53,7 +54,7 @@
 
                 <div class="panel space-4">
                     <div class="panel-header">
-                        Questions
+                        {% trans "Questions" %}
                         <div class="pull-right">
                                 <button id="add_question" type="button" class="btn btn-success btn-sm">+</button>
                                 <button id="remove_question" type="button" class="btn btn-danger btn-sm">-</button>
@@ -69,18 +70,18 @@
                                     <div class="form-group col-xs-10 controls">
                                       <label for="sel1">Question Type:</label>
                                       <select class="form-control question_type question_type_1" id="sel1">
-                                        <option value="text" selected>Text</option>
-                                        <option value="integer">Integer</option>
-                                        <option value="checkbox">Checkbox</option>
-                                        <option value="select">Select</option>
-                                        <option value="radio">Radio</option>
+                                        <option value="text" selected>{% trans "Text" %}</option>
+                                        <option value="integer">{% trans "Numero" %}</option>
+                                        <option value="checkbox">{% trans "Checkbox" %}</option>
+                                        <option value="select">{% trans "Select" %}</option>
+                                        <option value="radio">{% trans "Radio" %}</option>
                                       </select>
                                     </div>
                                 </div>
                                 <div class="row control-group">
                                     <div class="form-group col-xs-2"></div>
                                     <div class="form-group col-xs-10 controls">
-                                      <label>Description:</label>
+                                      <label>{% trans "Description" %}:</label>
                                       <textarea class="form-control question_description" rows="3"></textarea>
                                     </div>
                                 </div>
@@ -91,7 +92,7 @@
                                             Please, write all options separated by <strong>comma (,)</strong> if you are
                                             setting up a <strong>select</strong> or <strong>checkbox</strong> widget.
                                         </div>
-                                        <label>Options:</label>
+                                        <label>{% trans "Options" %}:</label>
                                         <input type="text" class="form-control question_options">
                                     </div>
                                 </div>
@@ -102,7 +103,7 @@
 
                     <div class="row">
                         <div class="col-lg-1 col-lg-offset-10">
-                            <button id="save" type="submit" class="btn btn-success btn-lg">Save</button>
+                            <button id="save" type="submit" class="btn btn-success btn-lg">{% trans "Save" %}</button>
                         </div>
                     </div>
                 </div>
