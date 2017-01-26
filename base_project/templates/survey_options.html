@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load staticfiles%}
+{% load staticfiles %}
 
 {% block title %}Survey{% endblock %}
 
@@ -36,7 +36,8 @@
                     </li>
                   </ul>
                 </div>
-                <a href="/delete_survey/{{ survey.id }}" class="btn btn-danger btn-block">Delete</a>
+{#                <a href="/delete_survey/{{ survey.id }}" class="btn btn-danger btn-block" >Delete</a>#}
+                <a class="btn btn-danger btn-block" data-toggle="modal" data-target="#remove_survey_modal">Remove</a>
               </div>
             </div>
             {% block edit_survey_options %}
@@ -45,4 +46,6 @@
         </div>
     </div>
 </section>
+{% include "modals/remove_survey_modal.html" %}
+
 {% endblock %}
