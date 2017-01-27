@@ -193,3 +193,10 @@ ul.sidenav-list li.active{
 .toggle.btn{
     margin-top: 10px;
 }
+
+/* Surveys */
+
+.survey-question-description{
+    color: #18BC9C;
+    font-size: 16px;
+}
