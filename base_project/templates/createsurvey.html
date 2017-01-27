@@ -70,11 +70,13 @@
                                     <div class="form-group col-xs-10 controls">
                                       <label for="sel1">Question Type:</label>
                                       <select class="form-control question_type question_type_1" id="sel1">
-                                        <option value="text" selected>{% trans "Text" %}</option>
-                                        <option value="integer">{% trans "Numero" %}</option>
-                                        <option value="checkbox">{% trans "Checkbox" %}</option>
-                                        <option value="select">{% trans "Select" %}</option>
-                                        <option value="radio">{% trans "Radio" %}</option>
+                                        {% for k, v in widget_types.items %}
+                                            {% if k == 'text' %}
+                                              <option value="{{ k }}" selected>{{ v }}</option>
+                                            {% else %}
+                                              <option value="{{ k }}">{{ v }}</option>
+                                            {% endif %}
+                                        {% endfor %}
                                       </select>
                                     </div>
                                 </div>
@@ -94,6 +96,26 @@
                                         </div>
                                         <label>{% trans "Options" %}:</label>
                                         <input type="text" class="form-control question_options">
+                                    </div>
+                                </div>
+                                <div class="row control-group rows question_rows_1">
+                                    <div class="form-group col-xs-2"></div>
+                                    <div class="form-group col-xs-10 controls">
+                                        <div class="alert alert-info" role="alert">
+                                            Please, write each row in <strong>different</strong> lines.
+                                        </div>
+                                        <label>{% trans "Rows" %}:</label>
+                                        <textarea class="form-control question_rows" rows="3"></textarea>
+                                    </div>
+                                </div>
+                                <div class="row control-group columns question_columns_1">
+                                    <div class="form-group col-xs-2"></div>
+                                    <div class="form-group col-xs-10 controls">
+                                        <div class="alert alert-info" role="alert">
+                                            Please, write each column separated by <strong>comma (,)</strong>.
+                                        </div>
+                                        <label>{% trans "Columns" %}:</label>
+                                        <input type="text" class="form-control question_columns">
                                     </div>
                                 </div>
                             </div>
@@ -117,63 +139,76 @@
 {% endblock %}
 {% block scripts %}
 
-<script src="{% static "js/add_remove_question.js" %}"></script>
+{% include "blocks/add_remove_question.html" %}
 <script>
-    $('.active_button').click(function () {
-        if(!$('#fancy-checkbox-info').prop('checked')){
-            console.log('Uncheck');
-            $('#fancy-checkbox-info').prop( "checked", false );
-        }else{
-            console.log('Check');
-            $('#fancy-checkbox-info').prop( "checked", true );
+$('.active_button').click(function () {
+    if(!$('#fancy-checkbox-info').prop('checked')){
+        console.log('Uncheck');
+        $('#fancy-checkbox-info').prop( "checked", false );
+    }else{
+        console.log('Check');
+        $('#fancy-checkbox-info').prop( "checked", true );
+    }
+});
+
+$('#save').click(function () {
+
+    var dict = {};
+    var question_type = {};
+    var question_description = {};
+    var question_options = {};
+    var question_rows = {};
+    var question_columns = {};
+
+    var survey_name =  $('#survey_name').val();
+    var active = $('#fancy-checkbox-info').prop('checked');
+
+    $('.question_type').each(function (index) {
+        //console.log($(this).val());
+        question_type["question_type_"+index] = $(this).val();
+    });
+    $('.question_description').each(function (index) {
+        //console.log($(this).val());
+        question_description["question_description_"+index] = $(this).val();
+    });
+    $('.question_options').each(function (index) {
+        //console.log($(this).val());
+        question_options["question_options_"+index] =  $(this).val();
+    });
+    $('.question_rows').each(function (index) {
+        //console.log($(this).val());
+        question_rows["question_rows_"+index] =  $(this).val();
+    });
+    $('.question_columns').each(function (index) {
+        //console.log($(this).val());
+        question_columns["question_columns_"+index] =  $(this).val();
+    });
+
+    dict["survey_name"] = survey_name;
+    dict["active"] = active;
+    dict["question_type"] = question_type;
+    dict["question_description"] = question_description;
+    dict["question_options"] = question_options;
+    dict["question_rows"] = question_rows;
+    dict["question_columns"] = question_columns;
+
+    $.ajax({
+        url : "",
+        type: "POST",
+        data : {'csrfmiddlewaretoken': '{{csrf_token}}', 'dict': JSON.stringify(dict)},
+        success: function(data, textStatus, jqXHR)
+        {
+            if (data['status'] == 1){
+                window.location.replace("/my_account?status=1");
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown)
+        {
+            console.log("error");
         }
     });
 
-    $('#save').click(function () {
-
-        var dict = {};
-        var question_type = {};
-        var question_description = {};
-        var question_options = {};
-
-        var survey_name =  $('#survey_name').val();
-        var active = $('#fancy-checkbox-info').prop('checked');
-
-        $('.question_type').each(function (index) {
-            //console.log($(this).val());
-            question_type["question_type_"+index] = $(this).val();
-        });
-        $('.question_description').each(function (index) {
-            //console.log($(this).val());
-            question_description["question_description_"+index] = $(this).val();
-        });
-        $('.question_options').each(function (index) {
-            //console.log($(this).val());
-            question_options["question_options_"+index] =  $(this).val();
-        });
-        dict["survey_name"] = survey_name;
-        dict["active"] = active;
-        dict["question_type"] = question_type;
-        dict["question_description"] = question_description;
-        dict["question_options"] = question_options;
-
-        $.ajax({
-            url : "",
-            type: "POST",
-            data : {'csrfmiddlewaretoken': '{{csrf_token}}', 'dict': JSON.stringify(dict)},
-            success: function(data, textStatus, jqXHR)
-            {
-                if (data['status'] == 1){
-                    window.location.replace("/my_account?status=1");
-                }
-            },
-            error: function (jqXHR, textStatus, errorThrown)
-            {
-                console.log("error");
-            }
-        });
-
-    });
+});
 </script>
 
 {% endblock %}

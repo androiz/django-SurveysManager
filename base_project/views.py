@@ -20,7 +20,7 @@ from django.conf import settings
 from base_project.emails import account_activation_email
 from base_project.models import UserProfile, Survey, Question, Answer, UserTokenActivation
 from base_project.forms import SurveyForm
-from base_project.constants import CHECKBOX, SELECT, INTEGER, TEXT, YES_NO, WIDGET_TYPES, RADIO
+from base_project.constants import CHECKBOX, SELECT, INTEGER, TEXT, YES_NO, WIDGET_TYPES, RADIO, MATRIX
 from base_project.charts import Charts
 
 # Create your views here.
@@ -157,7 +157,8 @@ class CreateSurvey(TemplateView):
 
         context = {
             'user': user,
-            'form': form
+            'form': form,
+            'widget_types': WIDGET_TYPES
         }
 
         return render(request, template_name=self.template_name, context=context)
@@ -180,6 +181,8 @@ class CreateSurvey(TemplateView):
             QUESTION_TYPE_N = "question_type_" + str(i)
             QUESTION_DESCRIPTION_N = "question_description_" + str(i)
             QUESTION_OPTIONS_N = "question_options_" + str(i)
+            QUESTION_ROWS_N = "question_rows_" + str(i)
+            QUESTION_COLUMNS_N = "question_columns_" + str(i)
 
             TYPES = [SELECT, CHECKBOX, RADIO]
 
@@ -189,10 +192,17 @@ class CreateSurvey(TemplateView):
             if question_type in TYPES:
                 question_options = survey['question_options'][QUESTION_OPTIONS_N]
 
+            question_rows = ""
+            question_columns = ""
+            if question_type == MATRIX:
+                question_rows = survey['question_rows'][QUESTION_ROWS_N]
+                question_columns = survey['question_columns'][QUESTION_COLUMNS_N]
 
             q = Question.objects.create(survey=s, question_type=question_type,
                                         question_description=question_description,
-                                        question_options=question_options)
+                                        question_options=question_options,
+                                        question_rows=question_rows,
+                                        question_columns=question_columns)
 
 
         context = {
@@ -386,6 +396,8 @@ class SurveyOptionsQuestions(TemplateView):
             'survey': survey,
             'questions': questions,
             'widget_types': WIDGET_TYPES,
+            'options_widgets': [RADIO, CHECKBOX, SELECT],
+            'matrix_options_widgets': [MATRIX],
             'selected_option': 'questions'
         }
 
@@ -461,16 +473,21 @@ class SurveyView(TemplateView):
         if survey.active:
             questions = Question.objects.filter(survey=survey)
 
-            TYPES = [SELECT, CHECKBOX, RADIO]
+            OPTIONS_TYPES = [SELECT, CHECKBOX, RADIO]
+            MATRIX_TYPES = [MATRIX]
 
             for x in questions:
-                if x.question_type in TYPES:
+                if x.question_type in OPTIONS_TYPES:
                     x.options = x.question_options.split(",")
+                if x.question_type in MATRIX_TYPES:
+                    x.rows = x.question_rows.split("\n")
+                    x.columns = x.question_columns.split(",")
 
             context = {
                 'survey': survey,
                 'questions': questions,
-                'widget_types': WIDGET_TYPES
+                'widget_types': WIDGET_TYPES,
+                'matrix_types': MATRIX_TYPES
             }
 
             return render(request, template_name=self.template_name, context=context)

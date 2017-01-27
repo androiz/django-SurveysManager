@@ -1,17 +1,18 @@
-/**
- * Created by Andres on 9/1/17.
- */
+{% load i18n %}
+<script>
 
 var q = '<div class="question question_#nn"> <div class="row control-group">' +
                 '<div class="form-group col-xs-2"><h2>##nn</h2></div> ' +
                 '<div class="form-group col-xs-10 controls"> ' +
                 '<label for="sel1">Question Type:</label> ' +
                 '<select class="form-control question_type question_type_#nn"> ' +
-                '<option value="text">Text</option> ' +
-                '<option value="integer">Integer</option> ' +
-                '<option value="checkbox">Checkbox</option> ' +
-                '<option value="select">Select</option> ' +
-                '<option value="radio">Radio</option> ' +
+                {% for k, v in widget_types.items %}
+                    {% if k == 'text' %}
+                    '<option value="{{ k }}" selected>{{ v }}</option>' +
+                    {% else %}
+                    '<option value="{{ k }}">{{ v }}</option>' +
+                    {% endif %}
+                {% endfor %}
                 '</select> ' +
                 '</div> ' +
                 '</div> ' +
@@ -33,6 +34,26 @@ var q = '<div class="question question_#nn"> <div class="row control-group">' +
                 '<input type="text" class="form-control question_options"> ' +
                 '</div> ' +
                 '</div> ' +
+                '<div class="row control-group rows question_rows_#nn">' +
+                '<div class="form-group col-xs-2"></div>' +
+                '<div class="form-group col-xs-10 controls">' +
+                '<div class="alert alert-info" role="alert">' +
+                'Please, write each row in <strong>different</strong> lines.' +
+                '</div>' +
+                '<label>{% trans "Rows" %}:</label>' +
+                '<textarea class="form-control question_rows" rows="3"></textarea>' +
+                '</div>' +
+                '</div>' +
+                '<div class="row control-group columns question_columns_#nn">' +
+                '<div class="form-group col-xs-2"></div>' +
+                '<div class="form-group col-xs-10 controls">' +
+                '<div class="alert alert-info" role="alert">' +
+                'Please, write each column separated by <strong>comma (,)</strong>.' +
+                '</div>' +
+                '<label>{% trans "Columns" %}:</label>' +
+                '<input type="text" class="form-control question_columns">' +
+                '</div>' +
+                '</div>' +
                 '</div>';
 
 $("#add_question").click(function () {
@@ -40,6 +61,8 @@ $("#add_question").click(function () {
     var new_question = q.replace(/#nn/g, n+1);
     $(".question").last().after(new_question);
     $(".question .question_options_" + (n+1)).hide();
+    $(".question .question_rows_" + (n+1)).hide();
+    $(".question .question_columns_" + (n+1)).hide();
 });
 $("#remove_question").click(function () {
     var n = $('.question').length;
@@ -49,14 +72,24 @@ $("#remove_question").click(function () {
 });
 
 $('.question_options_1').hide();
+$('.question_rows_1').hide();
+$('.question_columns_1').hide();
 
 $(document).on("change", '.questions .question_type',function () {
-    console.log("asdasd");
     var val = $(this).val();
     if (val == 'checkbox' || val == 'radio' || val == 'select') {
-        console.log($(this).closest('.question_options'));
         $(this).parents('.question').find('.options').show();
+        $(this).parents('.question').find('.rows').hide();
+        $(this).parents('.question').find('.columns').hide();
+    }else if ( val == 'matrix') {
+        $(this).parents('.question').find('.options').hide();
+        $(this).parents('.question').find('.rows').show();
+        $(this).parents('.question').find('.columns').show();
     } else {
         $(this).parents('.question').find('.options').hide();
+        $(this).parents('.question').find('.rows').hide();
+        $(this).parents('.question').find('.columns').hide();
     }
 });
+
+</script>

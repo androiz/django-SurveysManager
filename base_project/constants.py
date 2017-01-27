@@ -6,8 +6,16 @@ INTEGER = 'integer'
 SELECT = 'select'
 CHECKBOX = 'checkbox'
 RADIO = 'radio'
+MATRIX = 'matrix'
 
-WIDGET_TYPES = {TEXT: 'Text', INTEGER: 'Integer', SELECT: 'Select', CHECKBOX: 'Checkbox', RADIO: 'Radio'}
+WIDGET_TYPES = {
+    TEXT: 'Text',
+    INTEGER: 'Integer',
+    SELECT: 'Select',
+    CHECKBOX: 'Checkbox',
+    RADIO: 'Radio',
+    MATRIX: 'Matrix'
+}
 
 TRUE = ['1', 'yes', 'true', 'True']
 FALSE = ['0', 'no', 'false', 'False']

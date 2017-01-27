@@ -28,6 +28,8 @@ class Question(models.Model):
     question_type = models.CharField(max_length=100, blank=False, null=False)
     question_description = models.CharField(max_length=255, blank=False, null=False)
     question_options = models.CharField(max_length=255, blank=True, null=True)
+    question_rows = models.CharField(max_length=255, blank=True, null=True)
+    question_columns = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
         return str(self.id)

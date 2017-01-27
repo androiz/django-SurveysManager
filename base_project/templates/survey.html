@@ -36,6 +36,8 @@
                                         {% include "widgets/select_widget.html" %}
                                     {% elif question.question_type == 'radio'%}
                                         {% include "widgets/radio_widget.html" %}
+                                    {% elif question.question_type == 'matrix'%}
+                                        {% include "widgets/matrix_widget.html" %}
                                     {% endif %}
                                 {% endfor %} 
                             </div>
