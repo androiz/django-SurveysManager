@@ -504,14 +504,23 @@ class SurveyView(TemplateView):
             max_group = 0
 
         checkbox_answers = dict()
+        matrix_answers = dict()
 
         for key, value in request.POST.items():
             ql = key.split('_')
             if ql[0] == 'question':
                 q_id = int(ql[1])
                 q = Question.objects.get(pk=q_id, survey=survey)
-                if q.question_type != CHECKBOX:
+                if q.question_type not in [MATRIX, CHECKBOX]:
                     answer = Answer.objects.create(survey=survey, question=q, answer_group=max_group, answer=value)
+                elif q.question_type == MATRIX:
+                    k = ql[0] + "_" + ql[1]
+                    row = ql[2] + "_" + ql[3]
+                    if k not in matrix_answers.keys():
+                        matrix_answers[k] = dict()
+                        matrix_answers[k][row] = value
+                    else:
+                        matrix_answers[k][row] = value
                 else:
                     num_options = len(q.question_options.split(","))
                     if ql[0]+"_"+ql[1] in checkbox_answers.keys():
@@ -527,6 +536,15 @@ class SurveyView(TemplateView):
             q = Question.objects.get(pk=q_id, survey=survey)
             checkbox_answer = str(value).strip('[]')
             answer = Answer.objects.create(survey=survey, question=q, answer_group=max_group, answer=checkbox_answer)
+
+        # MATRIX Question
+        for key, value in matrix_answers.items():
+            ql = key.split('_')
+            q_id = int(ql[1])
+            q = Question.objects.get(pk=q_id, survey=survey)
+            a = [str(v) for k, v in value.items()]
+            matrix_answer = ','.join(a)
+            answer = Answer.objects.create(survey=survey, question=q, answer_group=max_group, answer=matrix_answer)
 
         return redirect('/my_account')
 

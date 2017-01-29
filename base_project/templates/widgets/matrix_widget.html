@@ -7,12 +7,29 @@
         </div>
         <div class="form-group col-xs-12 answer_question">
 
-            {% for row in question.rows %}
-                {{ row }}
-            {% endfor %}
-            {% for col in question.columns %}
-                {{ col }}
-            {% endfor %}
+            <table class="table table-condensed table-matrix">
+                <tr>
+                    <td></td>
+                    {% for col in question.columns %}
+                    <td class="td-hover">{{ col }}</td>
+                    {% endfor %}
+                </tr>
+                {% for row in question.rows %}
+                <tr>
+                    <td class="td-hover">{{ row }}</td>
+                    {% for col in question.columns %}
+                    <td>
+                        <div class="form-group">
+                            <div class="radio radio-info radio-inline">
+                                <input id="question_{{ question.id }}_row_{{ forloop.parentloop.counter }}_{{ forloop.counter }}" name="question_{{ question.id }}_row_{{ forloop.parentloop.counter }}" type="radio" value="{{ col }}">
+                                <label for="question_{{ question.id }}_row_{{ forloop.parentloop.counter }}_{{ forloop.counter }}"></label>
+                            </div>
+                        </div>
+                    </td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </table>
         </div>
     </div>
 </div>

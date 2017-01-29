@@ -200,3 +200,15 @@ ul.sidenav-list li.active{
     color: #18BC9C;
     font-size: 16px;
 }
+
+.td-hover:hover {
+    background-color: #f5f5f5!important;
+}
+
+.td-hover {
+    background-color: inherit;
+}
+
+.table-matrix td{
+    border-top: none!important;
+}
