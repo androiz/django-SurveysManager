@@ -4,6 +4,7 @@ import hashlib
 import json
 import logging
 import math
+import collections
 
 from collections import OrderedDict
 
@@ -542,7 +543,8 @@ class SurveyView(TemplateView):
             ql = key.split('_')
             q_id = int(ql[1])
             q = Question.objects.get(pk=q_id, survey=survey)
-            a = [str(v) for k, v in value.items()]
+            rows = collections.OrderedDict(sorted(value.items()))
+            a = [str(v) for k, v in rows.items()]
             matrix_answer = ','.join(a)
             answer = Answer.objects.create(survey=survey, question=q, answer_group=max_group, answer=matrix_answer)
 
