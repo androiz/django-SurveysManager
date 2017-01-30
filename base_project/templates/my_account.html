@@ -77,12 +77,6 @@
             </div>
 
             <div class="col-md-9">
-                {% if request.GET.status == '1' %}
-                <div class="alert alert-success">  <!-- singular -->
-                    <a class="close" data-dismiss="alert">×</a>
-                    The survey has been created correctly.
-                </div>
-                {% endif %}
                 {% if messages %}
                     {% for message in messages %}
                         <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-{{ message.tags }}{% endif %}">  <!-- singular -->

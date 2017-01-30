@@ -5,7 +5,7 @@ var q = '<div class="question question_#nn"> <div class="row control-group">' +
                 '<div class="form-group col-xs-2"><h2>##nn</h2></div> ' +
                 '<div class="form-group col-xs-10 controls"> ' +
                 '<label for="sel1">Question Type:</label> ' +
-                '<select class="form-control question_type question_type_#nn"> ' +
+                '<select name="question_type_#nn" class="form-control question_type question_type_#nn"> ' +
                 {% for k, v in widget_types.items %}
                     {% if k == 'text' %}
                     '<option value="{{ k }}" selected>{{ v }}</option>' +
@@ -20,7 +20,7 @@ var q = '<div class="question question_#nn"> <div class="row control-group">' +
                 '<div class="form-group col-xs-2"></div> ' +
                 '<div class="form-group col-xs-10 controls"> ' +
                 '<label>Description:</label> ' +
-                '<textarea class="form-control question_description" rows="3"></textarea> ' +
+                '<textarea name="question_description_#nn" class="form-control question_description" rows="3" required></textarea> ' +
                 '</div> ' +
                 '</div> ' +
                 '<div class="row control-group options question_options_#nn"> ' +
@@ -31,7 +31,7 @@ var q = '<div class="question question_#nn"> <div class="row control-group">' +
                 'setting up a <strong>select</strong> or <strong>checkbox</strong> widget. ' +
                 '</div> ' +
                 '<label>Options:</label> ' +
-                '<input type="text" class="form-control question_options"> ' +
+                '<input name="question_options_#nn" type="text" class="form-control question_options"> ' +
                 '</div> ' +
                 '</div> ' +
                 '<div class="row control-group rows question_rows_#nn">' +
@@ -41,7 +41,7 @@ var q = '<div class="question question_#nn"> <div class="row control-group">' +
                 'Please, write each row in <strong>different</strong> lines.' +
                 '</div>' +
                 '<label>{% trans "Rows" %}:</label>' +
-                '<textarea class="form-control question_rows" rows="3"></textarea>' +
+                '<textarea name="question_rows_#nn" class="form-control question_rows" rows="3"></textarea>' +
                 '</div>' +
                 '</div>' +
                 '<div class="row control-group columns question_columns_#nn">' +
@@ -51,7 +51,7 @@ var q = '<div class="question question_#nn"> <div class="row control-group">' +
                 'Please, write each column separated by <strong>comma (,)</strong>.' +
                 '</div>' +
                 '<label>{% trans "Columns" %}:</label>' +
-                '<input type="text" class="form-control question_columns">' +
+                '<input name="question_columns_#nn" type="text" class="form-control question_columns">' +
                 '</div>' +
                 '</div>' +
                 '</div>';
@@ -63,12 +63,15 @@ $("#add_question").click(function () {
     $(".question .question_options_" + (n+1)).hide();
     $(".question .question_rows_" + (n+1)).hide();
     $(".question .question_columns_" + (n+1)).hide();
+
+    $('#create_survey').validator('update');
 });
 $("#remove_question").click(function () {
     var n = $('.question').length;
     if (n > 1){
         $('.question').last().remove();
     }
+    $('#create_survey').validator('update');
 });
 
 $('.question_options_1').hide();

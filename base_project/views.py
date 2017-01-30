@@ -20,7 +20,6 @@ from django.conf import settings
 
 from base_project.emails import account_activation_email
 from base_project.models import UserProfile, Survey, Question, Answer, UserTokenActivation
-from base_project.forms import SurveyForm
 from base_project.constants import CHECKBOX, SELECT, INTEGER, TEXT, YES_NO, WIDGET_TYPES, RADIO, MATRIX
 from base_project.charts import Charts
 
@@ -65,7 +64,7 @@ class SignUp(TemplateView):
                 url = request.META['HTTP_HOST'] + "/activation/" + token + "/"
                 sent_email = account_activation_email(url, u.email)
 
-                messages.success(request, "<strong>Warning!</strong> Te hemos enviado un email de confirmacion para completar tu registro.")
+                messages.warning(request, "<strong>warning!</strong> Te hemos enviado un email de confirmacion para completar tu registro.")
                 return HttpResponseRedirect('/')
             else:
                 # user was retrieved
@@ -154,11 +153,9 @@ class CreateSurvey(TemplateView):
 
     def get(self, request, *args, **kwargs):
         user = request.user
-        form = SurveyForm()
 
         context = {
             'user': user,
-            'form': form,
             'widget_types': WIDGET_TYPES
         }
 
@@ -166,19 +163,32 @@ class CreateSurvey(TemplateView):
 
     def post(self, request):
         user = request.user
-        data = request.POST
+        survey = request.POST
 
-        survey = json.loads(data['dict'])
-
-        survey_name = survey['survey_name']
-        survey_active = survey['active']
+        survey_name = survey.get('name', None)
+        survey_active = True if survey.get('active', '') == 'true' else False
 
         try:
             s = Survey.objects.create(user=user, name=survey_name, active=survey_active)
         except Exception as e:
             print e
 
-        for i in range(0,len(survey['question_type'])):
+        questions = dict()
+
+        for k, v in survey.items():
+            keys = k.split('_')
+
+            if keys[0] == 'question':
+                index = int(keys[2])
+
+                if index not in questions:
+                    questions[index] = dict()
+                    questions[index][k] = v
+                else:
+                    questions[index][k] = v
+
+        for i, q in questions.items():
+
             QUESTION_TYPE_N = "question_type_" + str(i)
             QUESTION_DESCRIPTION_N = "question_description_" + str(i)
             QUESTION_OPTIONS_N = "question_options_" + str(i)
@@ -187,17 +197,17 @@ class CreateSurvey(TemplateView):
 
             TYPES = [SELECT, CHECKBOX, RADIO]
 
-            question_type = survey['question_type'][QUESTION_TYPE_N]
-            question_description = survey['question_description'][QUESTION_DESCRIPTION_N]
+            question_type = q[QUESTION_TYPE_N]
+            question_description = q[QUESTION_DESCRIPTION_N]
             question_options = ""
             if question_type in TYPES:
-                question_options = survey['question_options'][QUESTION_OPTIONS_N]
+                question_options = q[QUESTION_OPTIONS_N]
 
             question_rows = ""
             question_columns = ""
             if question_type == MATRIX:
-                question_rows = survey['question_rows'][QUESTION_ROWS_N]
-                question_columns = survey['question_columns'][QUESTION_COLUMNS_N]
+                question_rows = q[QUESTION_ROWS_N]
+                question_columns = q[QUESTION_COLUMNS_N]
 
             q = Question.objects.create(survey=s, question_type=question_type,
                                         question_description=question_description,
@@ -206,11 +216,8 @@ class CreateSurvey(TemplateView):
                                         question_columns=question_columns)
 
 
-        context = {
-            'status': 1
-        }
-
-        return HttpResponse(json.dumps(context), content_type='application/json')
+        messages.success(request, "<strong>Success!</strong> The survey has been created correctly.")
+        return HttpResponseRedirect('/my_account')
 
 class EditProfile(TemplateView):
     template_name = "edit_profile.html"
