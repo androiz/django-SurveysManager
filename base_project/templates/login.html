@@ -24,20 +24,20 @@
                             </div>
                         {% endfor %}
                     {% endif %}
-                    <form action="/login/" method="post" name="login" id="loginForm" novalidate>
+                    <form action="/login/" method="post" name="login" id="loginForm" data-toggle="validator">
                         {% csrf_token %}
                         <div class="row control-group">
                             <div class="form-group col-xs-12 floating-label-form-group controls">
                                 <label>Email Address</label>
-                                <input type="email" class="form-control" placeholder="Email" id="email" name="email" required data-validation-required-message="Please enter your email address.">
-                                <p class="help-block text-danger"></p>
+                                <input type="email" class="form-control" placeholder="Email" id="email" name="email" required data-error="Please enter your email address correctly.">
+                                <div class="help-block with-errors"></div>
                             </div>
                         </div>
                         <div class="row control-group">
                             <div class="form-group col-xs-12 floating-label-form-group controls">
                                 <label>Password</label>
-                                <input type="password" class="form-control" placeholder="Password" id="password" name="password" required data-validation-required-message="Please enter your surname.">
-                                <p class="help-block text-danger"></p>
+                                <input type="password" class="form-control" placeholder="Password" id="password" name="password" required data-error="Please enter your password.">
+                                <div class="help-block with-errors"></div>
                             </div>
                         </div>
                         <br>

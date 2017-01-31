@@ -24,34 +24,34 @@
                         </div>
                     {% endfor %}
                 {% endif %}
-                <form action="/sign_up/" method="post" name="sign_up" id="signUpForm" novalidate>
+                <form action="/sign_up/" method="post" name="sign_up" id="signUpForm" data-toggle="validator">
                     {% csrf_token %}
                     <div class="row control-group">
                         <div class="form-group col-xs-12 floating-label-form-group controls {% if first_name %}floating-label-form-group-with-value{% endif %}">
                             <label>Name</label>
-                            <input type="text" class="form-control" placeholder="Name" id="name" name="name" value="{{ first_name }}" required data-validation-required-message="Please enter your name.">
-                            <p class="help-block text-danger"></p>
+                            <input type="text" class="form-control" placeholder="Name" id="name" name="name" value="{{ first_name }}" required data-error="Please enter your name.">
+                            <div class="help-block with-errors"></div>
                         </div>
                     </div>
                     <div class="row control-group">
                         <div class="form-group col-xs-12 floating-label-form-group controls {% if last_name %}floating-label-form-group-with-value{% endif %}">
                             <label>Surname</label>
-                            <input type="text" class="form-control" placeholder="Surname" id="surname" name="surname" value="{{ last_name }}" required data-validation-required-message="Please enter your surname.">
-                            <p class="help-block text-danger"></p>
+                            <input type="text" class="form-control" placeholder="Surname" id="surname" name="surname" value="{{ last_name }}" required data-error="Please enter your surname.">
+                            <div class="help-block with-errors"></div>
                         </div>
                     </div>
                     <div class="row control-group">
                         <div class="form-group col-xs-12 floating-label-form-group controls {% if email %}floating-label-form-group-with-value{% endif %}">
                             <label>Email Address</label>
-                            <input type="email" class="form-control" placeholder="Email" id="email" name="email" value="{{ email }}" required data-validation-required-message="Please enter your email address.">
-                            <p class="help-block text-danger"></p>
+                            <input type="email" class="form-control" placeholder="Email" id="email" name="email" value="{{ email }}" required data-error="Please enter your email address.">
+                            <div class="help-block with-errors"></div>
                         </div>
                     </div>
                     <div class="row control-group">
                         <div class="form-group col-xs-12 floating-label-form-group controls">
                             <label>Password</label>
-                            <input type="password" class="form-control" placeholder="Password" id="password" name="password" required data-validation-required-message="Please enter your surname.">
-                            <p class="help-block text-danger"></p>
+                            <input type="password" class="form-control" placeholder="Password" id="password" name="password" required data-error="Please enter your surname.">
+                            <div class="help-block with-errors"></div>
                         </div>
                     </div>
                     <br>
