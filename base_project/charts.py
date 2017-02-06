@@ -71,11 +71,17 @@ class Charts:
             options = q.question_options.split(',')
 
             answers = Answer.objects.filter(question=q)
-            results = dict((x, 0) for x in options)
+            results = dict((x, dict({'count': 0, 'percentage': 0})) for x in options)
 
             for answer in answers:
                 a = answer.answer
-                results[a] += 1
+                results[a]['count'] += 1
+
+            total_answers = sum([v['count'] for k, v in results.items()])
+
+            for answer in answers:
+                a = answer.answer
+                results[a]['percentage'] = round(results[a]['count'] * 100.0/total_answers, 2)
 
             chart['id'] = q.pk
             chart['description'] = q.question_description

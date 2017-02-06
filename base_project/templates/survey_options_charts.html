@@ -78,7 +78,7 @@ function drawBasic() {
     var data = google.visualization.arrayToDataTable([
       ['Task', 'Hours per Day'],
       {% for key, elem in chart.results.items %}
-        ['{{ key|safe }}', {{ elem|safe }}],
+        ['{{ key|safe }}', {{ elem.count|safe }}],
       {% endfor %}
     ]);
 

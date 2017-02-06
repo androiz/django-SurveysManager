@@ -588,11 +588,11 @@ def exportPDF(request, id):
     user = request.user
     survey = Survey.objects.get(user=user, pk=id)
     questions = Question.objects.filter(survey=survey)
+    radio_questions = Question.objects.filter(survey=survey, question_type=RADIO)
+
     unclassified_answers = Answer.objects.filter(survey=survey)
 
     first_line = ['Row'] + [x.question_description for x in questions]
-
-
 
     answers = dict()
     for x in unclassified_answers:
@@ -608,11 +608,15 @@ def exportPDF(request, id):
     for index, key in enumerate(answers.keys()):
         rows.append([str(index)] + [x.answer for x in answers[key]])
 
+    chart = Charts()
+    radio_answers = chart.Radio_Charts(radio_questions)
+
     return render_to_pdf(
             'blocks/exportPDF.html',
             {
                 'survey_name': survey.name,
                 'first_line': first_line,
                 'rows': rows,
+                'radio_answers': radio_answers
             }
         )

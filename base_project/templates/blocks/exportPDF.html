@@ -44,21 +44,42 @@
     </head>
     <body>
         <h1>{{ survey_name }}</h1></br>
-        <table class="table table-bordered">
-            <tr>
-               {% for item in first_line %}
-                   <th>{{ item }}</th>
-               {% endfor %}
-            </tr>
-
-            {% for row in rows %}
+        <div>
+            <table class="table table-bordered">
                 <tr>
-                {% for item in row %}
-                    <td>{{ item }}</td>
-                {% endfor %}
+                   {% for item in first_line %}
+                       <th>{{ item }}</th>
+                   {% endfor %}
                 </tr>
+
+                {% for row in rows %}
+                    <tr>
+                    {% for item in row %}
+                        <td>{{ item }}</td>
+                    {% endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <div>
+            {% for question in radio_answers %}
+                <h2>{{ question.description }}</h2>
+                <table>
+                    <tr>
+                        <th>Option</th>
+                        <th>Nº Answers</th>
+                        <th>Percentage</th>
+                    </tr>
+                    {% for key, answer in question.results.items %}
+                        <tr>
+                            <td>{{ key }}</td>
+                            <td>{{ answer.count }}</td>
+                            <td>{{ answer.percentage }} %</td>
+                        </tr>
+                    {% endfor %}
+                </table>
             {% endfor %}
-        </table>
+        </div>
         <div id="footerContent">
             {%block page_foot%}
                 Page <pdf:pagenumber>
