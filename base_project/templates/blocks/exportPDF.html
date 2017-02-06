@@ -1,0 +1,68 @@
+{% load i18n %}
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>{{ survey_name }}</title>
+        <style type="text/css">
+            .table-bordered {
+                border: 1px solid #ddd;
+            }
+            .table {
+                width: 100%;
+                max-width: 100%;
+                margin-bottom: 20px;
+            }
+            table {
+                background-color: transparent;
+            }
+            table {
+                border-spacing: 0;
+                border-collapse: collapse;
+            }
+            thead {
+                display: table-header-group;
+                vertical-align: middle;
+                border-color: inherit;
+            }
+            tr {
+                display: table-row;
+                vertical-align: inherit;
+                border-color: inherit;
+            }
+            @page {
+                size:  A4 landscape;
+                margin: 1cm;
+                @frame footer {
+                    -pdf-frame-content: footerContent;
+                    bottom: 0cm;
+                    margin-left: 9cm;
+                    margin-right: 9cm;
+                    height: 1cm;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <h1>{{ survey_name }}</h1></br>
+        <table class="table table-bordered">
+            <tr>
+               {% for item in first_line %}
+                   <th>{{ item }}</th>
+               {% endfor %}
+            </tr>
+
+            {% for row in rows %}
+                <tr>
+                {% for item in row %}
+                    <td>{{ item }}</td>
+                {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+        <div id="footerContent">
+            {%block page_foot%}
+                Page <pdf:pagenumber>
+            {%endblock%}
+        </div>
+    </body>
+</html>

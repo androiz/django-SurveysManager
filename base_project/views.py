@@ -6,8 +6,6 @@ import logging
 import math
 import collections
 
-from collections import OrderedDict
-
 from django.db.models import Max
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
@@ -22,6 +20,7 @@ from base_project.emails import account_activation_email
 from base_project.models import UserProfile, Survey, Question, Answer, UserTokenActivation
 from base_project.constants import CHECKBOX, SELECT, INTEGER, TEXT, YES_NO, WIDGET_TYPES, RADIO, MATRIX
 from base_project.charts import Charts
+from base_project.exports import render_to_pdf
 
 # Create your views here.
 
@@ -584,3 +583,36 @@ def exportCSV(request, id):
         writer.writerow([str(index)] + [x.answer for x in answers[key]])
 
     return response
+
+def exportPDF(request, id):
+    user = request.user
+    survey = Survey.objects.get(user=user, pk=id)
+    questions = Question.objects.filter(survey=survey)
+    unclassified_answers = Answer.objects.filter(survey=survey)
+
+    first_line = ['Row'] + [x.question_description for x in questions]
+
+
+
+    answers = dict()
+    for x in unclassified_answers:
+        if x.answer_group in answers.keys():
+            answers[x.answer_group].append(x)
+        else:
+            answers[x.answer_group] = [x]
+
+    rows = list()
+    for key, elem in answers.items():
+        answers[key] = sorted(elem, key=lambda x: x.question.id)
+
+    for index, key in enumerate(answers.keys()):
+        rows.append([str(index)] + [x.answer for x in answers[key]])
+
+    return render_to_pdf(
+            'blocks/exportPDF.html',
+            {
+                'survey_name': survey.name,
+                'first_line': first_line,
+                'rows': rows,
+            }
+        )

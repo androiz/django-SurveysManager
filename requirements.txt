@@ -1,5 +1,8 @@
 Django==1.10.2
 django-email-as-username==1.6.7
-Pillow==3.4.1
+Pillow
 wheel==0.24.0
 django-rosetta==0.7.12
+webencodings==0.5
+html5lib==1.0b8
+xhtml2pdf==0.0.6
